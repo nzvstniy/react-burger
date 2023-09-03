@@ -19,7 +19,7 @@ const BurgerConstructor = ({ data, modalOpen }) => {
         })}
         <ul className={`${styles.list} list-default my-scroll pr-2`}>
           {data.map(item => item.type !== 'bun' && (
-                <li key={item.index}> <ConstructorSingleElement data={item} /></li>
+                <li key={item._id}> <ConstructorSingleElement data={item} /> </li>
               )
           )}
         </ul>

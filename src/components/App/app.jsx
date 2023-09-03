@@ -10,15 +10,40 @@ import OrderDetails from '../OrderDetails/order-details';
 import Modal from '../Modal/modal';
 
 function App() {
+
   async function fetchApi() {
     try {
-      const res = await fetch('https://norma.nomoreparties.space/api/ingredients/');
-      const data = await res.json();
-      setIngredient(data.data);
+      const res = await fetch('https://norma.nomoreparties.space/api/ingredients/')
+        .then(async res => {
+          if (res.ok) {
+            const data = await res.json();
+            setIngredient(data.data);
+          }
+          return Promise.reject(`Status ${res.status}`);
+        })
     } catch (err) {
       console.log(err);
     }
   }
+  /*
+
+
+  if (!res.ok) {
+            return Promise.reject(`Ошибка ${res.status}`);
+          }
+          const data = await res.json();
+          setIngredient(data.data);
+
+  async function fetchApi()  {
+    try {
+      const res = await fetch('https://norma.nomoreparties.space/api/ingredients/')
+      const data = await res.json() ;
+      setIngredient(data.data) ;
+    } catch (err) {
+      console.log(err);
+    } 
+  } 
+  */
   useEffect(() => {
     fetchApi();
   }, []);
@@ -44,7 +69,8 @@ function App() {
     setOpen(true);
   };
 
-  const updateData = useCallback(ingredientData => { setConstructorState([...constructorState, ingredientData]);
+  const updateData = useCallback(ingredientData => {
+    setConstructorState([...constructorState, ingredientData]);
   });
 
 

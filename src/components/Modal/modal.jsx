@@ -9,13 +9,14 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 const modalRoot = document.getElementById('modal');
 
 const Modal = ({ children, title, modalClose }) => {
-  const escapeHandler = event => {
-    if (event.key === 'Escape') {
-      modalClose();
-    }
-  };
 
   useEffect(() => {
+    const escapeHandler = event => {
+      if (event.key === 'Escape') {
+        modalClose();
+      }
+    };
+
     document.addEventListener('keydown', escapeHandler);
     return () => { document.removeEventListener('keydown', escapeHandler) };
   }, []);
@@ -26,7 +27,7 @@ const Modal = ({ children, title, modalClose }) => {
         <div className={styles.header}>
           <h2 className="text text_type_main-large">{title}</h2>
           <button className="btn-default" onClick={modalClose}>
-            <CloseIcon type="primary"/>
+            <CloseIcon type="primary" />
           </button>
         </div>
         {children}

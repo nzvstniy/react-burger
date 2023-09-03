@@ -12,7 +12,7 @@ const Card = ({ data, updateConstructor, modalOpen }) => {
 
   return (
     <button className={`${styles.wrapper} btn-default`} onClick={clickHandler}>
-      <img src={data.image} alt="" className={`${styles.photo_img} mr-4 ml-4`} />
+      <img src={data.image} alt={data.name} className={`${styles.photo_img} mr-4 ml-4`} />
       <div className={styles.price}>
         <p className="text text_type_digits-default">{data.price}</p>
         <CurrencyIcon type="primary" />
