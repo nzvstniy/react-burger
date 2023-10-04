@@ -2,17 +2,24 @@ import React from 'react';
 import styles from './modal-overlay.module.css';
 import PropTypes from 'prop-types';
 
-const ModalOverlay = ({ children, modalClose }) => {
+function ModalOverlay({ children, id, setModal }) {
   return (
-    <div className={styles.overlay} onClick={modalClose}>
+    <div
+      className={`${styles.overlay}${
+        (setModal && ` ${styles.opened}`) || ''
+      }`}
+      id={id}
+    >
       {children}
     </div>
   );
-};
+}
 
 ModalOverlay.propTypes = {
   children: PropTypes.node.isRequired,
-  modalClose: PropTypes.func
+  id: PropTypes.string.isRequired,
+  setModal: PropTypes.bool.isRequired,
 };
 
 export default ModalOverlay;
+

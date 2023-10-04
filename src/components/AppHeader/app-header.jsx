@@ -13,13 +13,13 @@ const AppHeader = () => {
     <header className={styles.header}>
       <div className={`${styles.headCont} pt-4 pb-4`}>
         <nav className={styles.links}>
-          <div className="pt-4 pr-5 pb-4 pl-5">
+          <div className={`${styles.start} pt-4 pr-5 pb-4 pl-5`}>
             <a href="#">
-              <BurgerIcon type="primary"/>
-              <span className="text text_type_main-default text_color_inactive pl-2">Конструктор</span>
+              <BurgerIcon type="primary" />
+              <span className="text text_type_main-default text_color_active pl-2">Конструктор</span>
             </a>
           </div>
-          <div className="pt-4 pr-5 pb-4 pl-5">
+          <div className={`${styles.start} pt-4 pr-5 pb-4 pl-5`}>
             <a href="#">
               <ListIcon type="secondary" />
               <span className="text text_type_main-default text_color_inactive pl-2">Лента заказов</span>
@@ -32,10 +32,10 @@ const AppHeader = () => {
           </a>
         </div>
         <div className={styles.account}>
-          <div className="pt-4 pr-5 pb-4 pl-5">
+          <div className={`${styles.end} `}>
             <a href="#">
               <ProfileIcon type="secondary" />
-              <span className="text text_type_main-default text_color_inactive text-align-center pl-2">Личный кабинет</span>
+              <span className="text text_type_main-default text_color_inactive pl-2">Личный кабинет</span>
             </a>
 
 
