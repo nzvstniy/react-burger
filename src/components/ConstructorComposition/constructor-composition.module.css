@@ -4,18 +4,9 @@
   display: flex;
 }
 
-.tab {
+.ingredients {
   height: 686px;
   margin-top: 40px;
   overflow-y: auto;
  
 }
-
-.content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(272px, auto));
-  justify-items: center;
-  gap: 57px 14px;
-  padding: 24px 0 70px 11px;
-}
-

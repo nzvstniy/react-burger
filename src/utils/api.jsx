@@ -1,6 +1,10 @@
-const api = Object.freeze({
-    ingredient: 'https://norma.nomoreparties.space/api/ingredients',
-    order: 'https://norma.nomoreparties.space/api/orders',
-});
+const API = Object.freeze({
+    baseUrl: 'https://norma.nomoreparties.space/api',
+    endpoints: {
+      ingredients: '/ingredients',
+      orders: '/orders',
+    },
+  
+  });
 
-export default api;
+  export default API;

@@ -1,22 +1,37 @@
 
+
+
+.componentsEmpty, .containerBun {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  max-width: 536px;
+  width: 100%;
+  min-height: 80px;
+  margin-left: 48px;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  border-radius: var(--common-border-radius-s);
+  background: var(--background-element);
+}
 .order {
   display: flex;
   flex-direction: column;
   padding: 0 16px 0 0;
 }
-
 .components {
   display: flex;
   flex-direction: column;
   row-gap: 16px;
   width: 100%;
-  height: 464px;
+  max-height: 464px;
   margin: 16px 0 16px 17px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
-
-.bun {
-  margin-left: 48px;
+.componentsEmpty {
+  width: 100%;
+  margin: 16px 0 16px 48px;
 }
 
 .item {
@@ -24,7 +39,6 @@
   align-items: center;
   column-gap: 9.5px;
 }
-
 .info {
   display: flex;
   justify-content: flex-end;
@@ -32,20 +46,18 @@
   column-gap: 40px;
   margin-top: 40px;
 }
-
 .price {
   display: flex;
   align-items: center;
   column-gap: 9.5px;
-
+}
+.price > svg {
+  width: 33px;
+  height: 33px;
 }
 
-.componentEmpty {
-  width: 100%;
-  height: 464px;
-  margin: 16px 0 16px 17px;
+.containerEmptyDrop {
+  border: 1.2px solid;
+  border-color: #7e0eff;
 }
 
-.bunContainer {
-  height: 80px;
-}

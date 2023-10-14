@@ -1,0 +1,35 @@
+bun, containerBun, buntop, bunbottom, containeremptydrop
+.componentsEmpty, .containerBun {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 536px;
+    width: 100%;
+    min-height: 80px;
+    margin-left: 48px;
+    padding: 16px 24px;
+    box-sizing: border-box;
+    border-radius: var(--common-border-radius-s);
+    background: var(--background-element);
+  }
+  .bun {
+    margin-left: 48px;
+    user-select: none;
+ }
+  .bun > * > * {
+    cursor: default;
+ }
+  
+  .bunTop {
+    border-radius: var(--top-constructor-item-border-radius);
+  }
+  .bunBottom {
+    border-radius: var(--bottom-constructor-item-border-radius);
+  }
+  .containerEmptyDrop {
+    border: 1.2px solid;
+    border-color: #7e0eff;
+  }
+
+  

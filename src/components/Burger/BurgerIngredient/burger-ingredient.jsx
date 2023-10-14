@@ -1,78 +1,61 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredient.module.css';
+import PropTypes from 'prop-types';
 
-function BurgerIngredient({ _id, name, type, link, price,  ingredientSelect, bunSelect, setIngredientSelect, setBunSelect, totalPriceDispatcher, modalOpen, }) {
+import { useDrag } from 'react-dnd/dist/hooks';
+import DND_TYPES from '../../../utils/dnd-types';
 
-  const addIngredient = (
-    idSelect, nameSelect, typeSelect, imageSelect, priceSelect
-  ) => {
-    const newIngredient = {
-      _id: idSelect, name: nameSelect, type: typeSelect, image: imageSelect, price: priceSelect
-    };
+import { ingredientConstructorValue } from '../../../utils/ingredients-value';
 
-    if (typeSelect === 'bun') {
-      setBunSelect(newIngredient);
-      if (Object.keys(bunSelect).length) {
-        totalPriceDispatcher({
-          type: 'decrement',
-          ingredientType: typeSelect,
-          price: bunSelect.price,
-        });
-      }
-      totalPriceDispatcher({
-        type: 'increment',
-        ingredientType: typeSelect,
-        price,
-      })
-      return undefined;
-    }
-    const selected = ingredientSelect.find(
-      (ingredient) => ingredient._id === _id
-    );
-    if (selected) return undefined;
+function BurgerIngredient({ingredient, ingredientCounter, modalOpen,}) {
+  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+    type: DND_TYPES.INGREDIENT,
+    item: ingredient,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
 
-    setIngredientSelect((prevState) => [...prevState, newIngredient]);
-    return totalPriceDispatcher({
-      type: 'increment',
-      ingredientType: typeSelect,
-      price
-    })
-  };
+  const countValue = ingredientCounter.get(ingredient._id);
+
 
   return (
     <div
+    ref={dragPreview}
       role="button"
       tabIndex={0}
-      onClick={(event) => {
-        addIngredient(_id, name, type, link, price);
-        modalOpen(event, _id);
+      onClick={(evt) => {
+        //addIngredient(ingredient);
+        modalOpen(evt, ingredient);
       }}
-      onKeyDown={(event) => modalOpen(event, _id)}
+      onKeyDown={(evt) => modalOpen(evt, ingredient)}
     >
-      <article className={styles.card}>
-        <img className={styles.image} src={link} alt={`Ингредиент: ${name}`} />
+       <article
+        className={`${styles.card} ${isDragging && styles.cardDragging}`}
+        ref={drag}
+      >
+        {(countValue && <Counter count={countValue} size="default" />) ||
+          null}
+        <img
+          className={styles.image}
+          src={ingredient?.image}
+          alt={`Ингредиент: ${ingredient?.name}`}
+        />
         <div className={styles.price}>
-          <span>{price}</span>
+          <span>{ingredient?.price}</span>
           <CurrencyIcon />
         </div>
-        <h3 className={styles.heading}>{name}</h3>
+        <h3 className={styles.heading}>{ingredient?.name}</h3>
       </article>
     </div>
   );
 }
 
 BurgerIngredient.propTypes = {
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  setBunSelect: PropTypes.func.isRequired,
-  setIngredientSelect: PropTypes.func.isRequired,
-  totalPriceDispatcher: PropTypes.func.isRequired,
+  ingredient: ingredientConstructorValue.isRequired,
+  ingredientCounter: PropTypes.instanceOf(Map).isRequired,
   modalOpen: PropTypes.func.isRequired,
-
 };
-
 export default memo(BurgerIngredient);
+
