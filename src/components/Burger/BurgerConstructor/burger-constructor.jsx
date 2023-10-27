@@ -1,113 +1,176 @@
-import React, { useContext, useMemo } from 'react';
 import styles from './burger-constructor.module.css';
-import ingredientsValue from '../../../utils/ingredients-value';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import OrderDetails from '../../OrderDetails/order-details';
 import Modal from '../../Modal/modal';
 import { useState } from 'react'
-import IngredientContext from '../../../contexts/ingredientsContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { REMOVE_INGREDIENT, ADD_INGREDIENT } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-reducer';
+import PropTypes from 'prop-types';
+import { getBunSelect, getingredientsSelect } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-selector';
+import { v4 as uuidv4 } from 'uuid';
+import DND_TYPES from '../../../utils/dnd-types';
+import { useDrop } from 'react-dnd';
+import BunSelect from '../BunSelectConstructor/bun-select-constructor';
+import { sendOrder } from '../../../services/reducer-selector-directory/orderDetails/order-details-reducer';
+import { loading } from '../../../services/reducer-selector-directory/orderDetails/order-details-selector';
+import { useModal } from '../../../hooks/useModal';
 
-import api from '../../../utils/api';
+import IngredientSelectConstructor from '../IngredientSelectConstructor/ingredient-select-constructor';
+
+let previousBunId = '';
 
 
-async function sendOrder(order, saveOrder) {
-  try {
-    const res = await fetch(api.order, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ingredients: order }),
-    });
+function BurgerConstructor({ ingredientCounter, onCount, }) {
 
-    if (res.ok) {
-      const success = await res.json();
+  const { isModalOpen, modalOpen, modalClose } = useModal();
+  const [totalPrice, setTotalPrice] = useState(0);
 
-      return saveOrder(success);
+  const [lastBunPrice, setLastBunPrice] = useState(0);
+
+  const dispatch = useDispatch();
+  const status = useSelector(loading);
+
+  const bunSelect = useSelector(getBunSelect);
+  const ingredientsSelect = useSelector(getingredientsSelect);
+
+
+  const totalPriceIncrease = ({ type, price }) => {
+    if (type === 'bun') {
+      const bunPrice = price * 2;
+
+      if (lastBunPrice) {
+        setTotalPrice(totalPrice - lastBunPrice + bunPrice);
+        setLastBunPrice(bunPrice);
+      } else {
+        setTotalPrice(totalPrice + bunPrice);
+        setLastBunPrice(bunPrice);
+      }
+    } else {
+      setTotalPrice(totalPrice + price);
+    }
+  };
+
+  const totalPriceDecrease = (price) => {
+    setTotalPrice(totalPrice - price);
+  };
+
+  const counterIncrease = ({ _id, type }) => {
+    let value = ingredientCounter.get(_id);
+
+    if (type === 'bun' && value) return 2;
+
+    if (type === 'bun') {
+      ingredientCounter.set(previousBunId, 0);
+      previousBunId = _id;
+      return 2;
     }
 
-    return Promise.reject(new Error(`Ошибка ${res.status}`));
-  } catch (error) {
-    console.error(`Error status: ${error}`);
-  }
-}
+    value = value ? (value += 1) : 1;
+    return value;
+  };
+
+  const [{ isOver, ingredientDrop }, drop] = useDrop(
+    () => ({
+      accept: DND_TYPES.INGREDIENT,
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        ingredientDrop: monitor.getItem()?.type,
+      }),
+      drop: (ingredient) => {
+        dispatch(ADD_INGREDIENT({ ingredient, key: uuidv4() }));
+
+        onCount(
+          new Map(
+            ingredientCounter.set(
+              ingredient._id,
+              counterIncrease(ingredient)
+            )
+          )
+        );
+        totalPriceIncrease(ingredient);
+      },
+    }),
+    [ingredientCounter]
+  );
 
 
-function BurgerConstructor({ ingredientSelect, bunSelect, totalPrice }) {
 
-  const ingredients = useContext(IngredientContext);
+  const removeIngredient = ({ key, _id, price }) => {
+    dispatch(REMOVE_INGREDIENT({ key }));
 
-  const [orderDetailsModal, setOrderDetailsModal] =
-    useState(false);
+    const value = ingredientCounter.get(_id) - 1;
+    onCount(new Map(ingredientCounter.set(_id, value)));
+    totalPriceDecrease(price);
+  };
 
   const handleNewOrder = (event) => {
     event.preventDefault();
 
-    if (event.type === 'click') {
-      const order = [bunSelect, ...ingredientSelect].map(
-        (ingredientSelect) => ingredientSelect._id
-      );
-      sendOrder(order, setNewOrder);
-      setOrderDetailsModal(true);
-    }
-  };
+    const order = [bunSelect, ...ingredientsSelect].map(
+      (ingredientsSelect) => ingredientsSelect._id
+    );
+    dispatch(sendOrder(order));
+    modalOpen()
+  }
+
 
   const handleModalClose = () => {
-    setOrderDetailsModal(false);
+    modalClose()
   };
-  const [newOrder, setNewOrder] = useState({});
 
-  const bun = (posRu, posEng) => {
-    return (
-      (Object.keys(bunSelect).length && (
-        <ConstructorElement
-          extraClass={styles.bun}
-          type={posEng}
-          isLocked
-          text={`${bunSelect.name} (${posRu})`}
-          price={bunSelect.price}
-          thumbnail={bunSelect.image}
-        />
-      )) || <div className={styles.bunContainer} />
-    );
-  };
+
 
 
   return (
     <>
       <section aria-label="Оформление заказа">
-        <form className={styles.order}>
-          {bun('верхняя', 'top')}
-          {(ingredientSelect.length && (
+        <form className={styles.order} ref={drop} onSubmit={handleNewOrder}>
+          <BunSelect
+            bunSelect={bunSelect}
+            isOver={isOver}
+            ingredientDrop={ingredientDrop}
+            posRu="верхняя"
+            posEng="top"
+          />
+
+          {(ingredientsSelect.length && (
             <div className={`${styles.components} my-scroll`}>
-              {ingredientSelect.map(({ _id, name, price, image }) => (
-                <div key={`container-${_id}`} className={styles.item}>
-                  <DragIcon key={`icon-${_id}`} type="primary" />
-                  <ConstructorElement
-                    key={_id}
-                    text={name}
-                    price={price}
-                    thumbnail={image}
-                  />
-                </div>
+              {ingredientsSelect.map((ingredient, index) => (
+                <IngredientSelectConstructor
+                  key={`component-${ingredient.key}`}
+                  ingredient={ingredient}
+                  index={index}
+                  removeIngredient={() => removeIngredient(ingredient)}
+                />
               ))}
             </div>
-          )) || <div className={styles.componentEmpty} />}
+          )) || (
+              <div
+                className={`${styles.componentsEmpty}${(isOver &&
+                  ingredientDrop !== 'bun' &&
+                  ` ${styles.containerEmptyDrop}`) ||
+                  ''
+                  }`}
+              >
+                <span>Добавьте начинку</span>
+              </div>
+            )}
 
-          {bun('нижняя', 'bottom')}
+          <BunSelect
+            bunSelect={bunSelect}
+            isOver={isOver}
+            ingredientDrop={ingredientDrop}
+            posRu="нижняя"
+            posEng="bottom"
+          />
 
           <div className={styles.info}>
             <div className={styles.price}>
-              <span>{totalPrice.state}</span>
+              <span>{totalPrice}</span>
               <CurrencyIcon />
             </div>
-            <Button
-              htmlType="submit"
-              type="primary"
-              size="large"
-              onClick={handleNewOrder}
-            >
-              Оформить заказ
+            <Button htmlType="submit" type="primary" size="large">
+              {status ? 'Загрузка...' : 'Оформить заказ'}
             </Button>
           </div>
         </form>
@@ -116,10 +179,12 @@ function BurgerConstructor({ ingredientSelect, bunSelect, totalPrice }) {
       <Modal
 
         id="order-details"
-        setModal={orderDetailsModal}
+        setModal={isModalOpen}
         modalClose={handleModalClose}
+        loading={status}
       >
-        <OrderDetails newOrder={newOrder} />
+
+        <OrderDetails />
       </Modal>
 
 
@@ -127,7 +192,9 @@ function BurgerConstructor({ ingredientSelect, bunSelect, totalPrice }) {
   );
 };
 
-BurgerConstructor.propTypes = ingredientsValue;
+BurgerConstructor.propTypes = {
 
-
+  ingredientCounter: PropTypes.instanceOf(Map).isRequired,
+  onCount: PropTypes.func.isRequired,
+};
 export default BurgerConstructor;

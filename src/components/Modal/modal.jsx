@@ -8,13 +8,13 @@ import useModalClosing from '../../hooks/useModalClosing';
 
 
 
-function Modal({ children, id, setModal, modalClose, title }) {
+function Modal({ children, id, setModal, modalClose, title, ...rest }) {
 
   useModalClosing(id, setModal, modalClose);
 
 
   return createPortal(
-    <ModalOverlay id={id} setModal={setModal}>
+    <ModalOverlay id={id} setModal={setModal} {...rest}>
       <div className={`${styles.wrapper} p-10`}>
         <div className={styles.header}>
           <h2 className="text text_type_main-large">{title}</h2>

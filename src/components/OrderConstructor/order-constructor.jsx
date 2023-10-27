@@ -1,13 +1,16 @@
 import BurgerConstructor from "../Burger/BurgerConstructor/burger-constructor";
 import styles from './order-constructor.module.css'
-import ingredientsValue from "../../utils/ingredients-value";
 import ConstructorComposition from "../ConstructorComposition/constructor-composition";
-import IngredientContext from '../../contexts/ingredientsContext';
 import { useReducer, useState } from 'react';
+import { DndProvider } from "react-dnd/dist/core";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
+import { ingredientsValue } from "../../utils/ingredients-value";
+
 
 const startTotalPrice = { state: 0 };
 
-function reducer({ state }, {type, ingredientType, price}){
+function reducer({ state }, { type, ingredientType, price }) {
   switch (type) {
     case 'increment':
       return ingredientType === 'bun' ? { state: state + price * 2 } : { state: state + price };
@@ -16,43 +19,37 @@ function reducer({ state }, {type, ingredientType, price}){
     case 'reset':
       return startTotalPrice;
     default:
-      throw new Error('Some error');
+      throw new Error('Error');
 
-    }
+  }
 }
 
 
 
-function OrderConstructor({data}){
-  const [totalPrice, totalPriceDispatcher] = useReducer( reducer, startTotalPrice);
+function OrderConstructor() {
+  const [ingredientCounter, setIngredientCounter] = useState(new Map());
 
-  const [ingredientSelect, setIngredientSelect] = useState([]);
-  const [bunSelect, setBunSelect] = useState({});
 
-    return(
-        <main className={styles.main}>
-        <div className={styles.wrapper}>
-          <h1 className={styles.heading}>Соберите бургер</h1>
-          <div className={styles.shop}>
-            <ConstructorComposition 
-            data={data}
-            ingredientSelect = {ingredientSelect}
-            bunSelect = {bunSelect}
-            setIngredientSelect = {setIngredientSelect}
-            setBunSelect = {setBunSelect}
-            totalPriceDispatcher = {totalPriceDispatcher}
+  return (
+    <main className={styles.main}>
+      <div className={styles.wrapper}>
+        <h1 className={styles.heading}>Соберите бургер</h1>
+        <div className={styles.shop}>
+          <DndProvider backend={HTML5Backend}>
+            <ConstructorComposition
+              ingredientCounter={ingredientCounter}
             />
-            <IngredientContext.Provider value={data}>
-              <BurgerConstructor
-              ingredientSelect = {ingredientSelect}
-              bunSelect = {bunSelect}
-              totalPrice = {totalPrice}
-              />
-            </IngredientContext.Provider>
-          </div>
+
+            <BurgerConstructor
+              
+              ingredientCounter={ingredientCounter}
+              onCount={setIngredientCounter}
+            />
+          </DndProvider>
         </div>
-      </main>
-    );
+      </div>
+    </main>
+  );
 }
 
 

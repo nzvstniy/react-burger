@@ -1,41 +1,23 @@
-import React, { useState, useEffect } from 'react';
 import AppHeader from '../AppHeader/app-header';
-import api from '../../utils/api';
 import OrderConstructor from '../OrderConstructor/order-constructor';
+import { useGetIngredientsQuery } from '../../services/reducer-selector-directory/ingredients/ingredients-reducer';
+import Preload from '../Preload/preload';
+import styles from './app.module.css'
 
 
 function App() {
-  const [ingredient, setIngredient] = useState([]);
-
-  
-  useEffect(() => {
-    function fetchApi() {
-      return fetch(api.ingredient)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Status ${res.status}`);
-        })
-        .then((result) => {
-          setIngredient(result.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    fetchApi()
-  }, []);
-
-
-
+  const { loading, error } = useGetIngredientsQuery();
+  if (error) {
+    throw new Error(`Error status ${error.status}`);
+  }
   return (
     <>
-    <AppHeader />
-    <OrderConstructor data={ingredient}/>
+      <AppHeader />
+      {loading ?
+        (<div className={styles.preload}><Preload /></div>) : <OrderConstructor />
+      }
     </>
   );
 }
-
 
 export default App;

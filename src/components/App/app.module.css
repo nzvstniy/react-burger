@@ -19,3 +19,11 @@
   grid-template-columns: 600px 600px;
   gap: 40px;
 }
+
+
+.preload{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 88vh;
+}

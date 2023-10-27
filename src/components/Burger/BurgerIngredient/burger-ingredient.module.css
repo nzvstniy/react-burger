@@ -10,9 +10,12 @@
   width: 272px;
 
   cursor: pointer;
+  transition: opacity 0.15s ease;
 }
 
-
+.cardDragging{
+  opacity: 0.4;
+}
 
 .image {
   max-width: 240px;
