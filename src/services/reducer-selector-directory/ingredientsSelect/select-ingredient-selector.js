@@ -1,4 +1,4 @@
 export const getBunSelect = (state) => state.ingredientsSelect.bun;
 
-export const getingredientsSelect = (state) =>
+export const getIngredientsSelect = (state) =>
   state.ingredientsSelect.ingredients;

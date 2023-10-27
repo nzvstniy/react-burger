@@ -12,7 +12,7 @@ const BurgerSection = forwardRef(
         const ingredients = data?.data || [];
         return (
             <section aria-label={type} ref={ref}>
-                <h2 className={styles.heading}>{type}</h2>
+                <h2 className="text text_type_main-medium">{type}</h2>
                 <div className={styles.content}>
                     {ingredients
                         .filter(({ type }) => type === globalType)

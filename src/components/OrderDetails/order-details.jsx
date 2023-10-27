@@ -10,7 +10,7 @@ import Preload from '../Preload/preload';
   return newOrder ?(
     <div className={styles.wrapper}>
       <h2 className={`${styles.neon} text text_type_digits-large mb-8`}> {newOrder} </h2>
-      <p className="text text_type_main-medium">Идентификатор заказа</p>
+      <p className="text text_type_main-medium ">Идентификатор заказа</p>
       <img src={orderImg} alt="Заказ готов" className="mt-15 mb-15"/>
       <p className="text text_type_main-small mb-2">Ваш заказ начали готовить</p>
       <p className="text text_type_main-small text_color_inactive">

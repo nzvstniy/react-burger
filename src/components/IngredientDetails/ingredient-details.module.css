@@ -1,20 +1,27 @@
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .value {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .value__item {
-    display: flex;
-    min-width: 118px;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
+  padding: 40px 40px 60px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.value {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  align-items: center;
+
+}
+
+.value_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 8px;
+
+}
