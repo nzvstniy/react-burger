@@ -1,54 +1,133 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import ConstructorSingleElement from '../../ConstructorSingleElement/constructor-single-element';
+import React, { useContext, useMemo } from 'react';
 import styles from './burger-constructor.module.css';
-import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import ingredientsValue from '../../../utils/ingredients-value';
+import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import OrderDetails from '../../OrderDetails/order-details';
+import Modal from '../../Modal/modal';
+import { useState } from 'react'
+import IngredientContext from '../../../contexts/ingredientsContext';
 
-const BurgerConstructor = ({ data, modalOpen }) => {
-  const getPrice = useMemo(() => {
-    return Array.from(data).reduce((price, singleIng) => {
-      return singleIng.type === 'bun' ? price + singleIng.price * 2 : price + singleIng.price;
-    }, 0);
-  }, [data]);
+import api from '../../../utils/api';
+
+
+async function sendOrder(order, saveOrder) {
+  try {
+    const res = await fetch(api.order, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ingredients: order }),
+    });
+
+    if (res.ok) {
+      const success = await res.json();
+
+      return saveOrder(success);
+    }
+
+    return Promise.reject(new Error(`Ошибка ${res.status}`));
+  } catch (error) {
+    console.error(`Error status: ${error}`);
+  }
+}
+
+
+function BurgerConstructor({ ingredientSelect, bunSelect, totalPrice }) {
+
+  const ingredients = useContext(IngredientContext);
+
+  const [orderDetailsModal, setOrderDetailsModal] =
+    useState(false);
+
+  const handleNewOrder = (event) => {
+    event.preventDefault();
+
+    if (event.type === 'click') {
+      const order = [bunSelect, ...ingredientSelect].map(
+        (ingredientSelect) => ingredientSelect._id
+      );
+      sendOrder(order, setNewOrder);
+      setOrderDetailsModal(true);
+    }
+  };
+
+  const handleModalClose = () => {
+    setOrderDetailsModal(false);
+  };
+  const [newOrder, setNewOrder] = useState({});
+
+  const bun = (posRu, posEng) => {
+    return (
+      (Object.keys(bunSelect).length && (
+        <ConstructorElement
+          extraClass={styles.bun}
+          type={posEng}
+          isLocked
+          text={`${bunSelect.name} (${posRu})`}
+          price={bunSelect.price}
+          thumbnail={bunSelect.image}
+        />
+      )) || <div className={styles.bunContainer} />
+    );
+  };
+
 
   return (
-    data.length > 0 && (
-      <section className={`${styles.wrapper} mt-25 pl-4`}>
-        {data.map(item => {
-          return item.type === 'bun' && <ConstructorSingleElement data={item} key={item._id} type="top" />;
-        })}
-        <ul className={`${styles.list} list-default my-scroll pr-2`}>
-          {data.map(item => item.type !== 'bun' && (
-                <li key={item._id}> <ConstructorSingleElement data={item} /> </li>
-              )
-          )}
-        </ul>
-        {data.map(item => { 
-          return (
-            item.type === 'bun' && <ConstructorSingleElement data={item} key={item._id} type="bottom" />
-          );
-        })}
-        <div className={`${styles.checkout} mt-6`}>
-          <p className="text text_type_digits-medium mr-2">{getPrice}</p>
-          <CurrencyIcon type="primary" />
-          <Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            extraClass="ml-10 mr-4"
-            onClick={modalOpen}
-          >
-            Оформить заказ
-          </Button>
-        </div>
+    <>
+      <section aria-label="Оформление заказа">
+        <form className={styles.order}>
+          {bun('верхняя', 'top')}
+          {(ingredientSelect.length && (
+            <div className={`${styles.components} my-scroll`}>
+              {ingredientSelect.map(({ _id, name, price, image }) => (
+                <div key={`container-${_id}`} className={styles.item}>
+                  <DragIcon key={`icon-${_id}`} type="primary" />
+                  <ConstructorElement
+                    key={_id}
+                    text={name}
+                    price={price}
+                    thumbnail={image}
+                  />
+                </div>
+              ))}
+            </div>
+          )) || <div className={styles.componentEmpty} />}
+
+          {bun('нижняя', 'bottom')}
+
+          <div className={styles.info}>
+            <div className={styles.price}>
+              <span>{totalPrice.state}</span>
+              <CurrencyIcon />
+            </div>
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="large"
+              onClick={handleNewOrder}
+            >
+              Оформить заказ
+            </Button>
+          </div>
+        </form>
       </section>
-    )
+
+      <Modal
+
+        id="order-details"
+        setModal={orderDetailsModal}
+        modalClose={handleModalClose}
+      >
+        <OrderDetails newOrder={newOrder} />
+      </Modal>
+
+
+    </>
   );
 };
 
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-  modalOpen: PropTypes.func
-};
+BurgerConstructor.propTypes = ingredientsValue;
+
 
 export default BurgerConstructor;
