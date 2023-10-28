@@ -6,6 +6,5 @@ export default function useFormData() {
   const handleData = (event) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
-  console.log(data)
   return { data, setData, handleData };
 }

@@ -51,21 +51,7 @@ function AppHeader() {
 
               </div>
             ))}
-            {/** 
-           * <div className={`${styles.start} pt-4 pr-5 pb-4 pl-5`}>
-            <a href="/">
-              <BurgerIcon type="primary" />
-              <span className="text text_type_main-default text_color_active pl-2">Конструктор</span>
-            </a>
-          </div>
-
-          <div className={`${styles.start} pt-4 pr-5 pb-4 pl-5`}>
-            <a href="#">
-              <ListIcon type="secondary" />
-              <span className="text text_type_main-default text_color_inactive pl-2">Лента заказов</span>
-            </a>
-          </div>
-          */}
+           
 
           </nav>
 

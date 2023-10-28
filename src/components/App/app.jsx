@@ -32,10 +32,9 @@ function App() {
   const background = location.state?.background;
 
   const handleModalClose = () => {
-    const MS = 100;
 
     navigate(-1);
-    setTimeout(() => dispatch(RESET_INGREDIENT_DETAILS()), MS);
+    dispatch(RESET_INGREDIENT_DETAILS());
   };
 
   useGetIngredientsQuery();

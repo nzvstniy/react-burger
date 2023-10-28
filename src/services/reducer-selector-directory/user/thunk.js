@@ -103,6 +103,8 @@ export const checkUserAuth = createAsyncThunk(
     'user/auth',
     async (_, { rejectWithValue }) => {
         let token = localStorage.getItem('accessToken');
+        if (!token) return null;
+
         if (checkAccessToken(token)) {
             token = await restoreAccessToken();
         }
@@ -130,7 +132,7 @@ export const editUser = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         let token = localStorage.getItem('accessToken');
 
-        if (checkAccessToken(token)) {
+        if (token && checkAccessToken(token)) {
             token = await restoreAccessToken();
         }
         try {
