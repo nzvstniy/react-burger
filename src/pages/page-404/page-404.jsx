@@ -4,7 +4,6 @@ import AppHeader from '../../components/AppHeader/app-header';
 import styles from './page-404.module.css';
 import Lottie from 'react-lottie';
 import animationData from './404-animation.json'
-
 function Page404() {
   const navigate = useNavigate();
   const defaultOptions = {
@@ -25,7 +24,9 @@ function Page404() {
             <p className={`${styles.paragraph} text text_type_main-large`}>
               Страница не найдена
             </p>
+
           </div>
+
           <Lottie
             options={defaultOptions}
             height={500}
