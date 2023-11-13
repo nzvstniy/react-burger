@@ -34,7 +34,7 @@ function BunSelect({
                     ''
                     }`}
             >
-                <span>Добавьте булку</span>
+                <span className="text text_type_main-small">Добавьте булку</span>
             </div>
         )
     );

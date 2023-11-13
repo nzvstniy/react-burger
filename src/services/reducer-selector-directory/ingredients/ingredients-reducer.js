@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import API from '../../../utils/api'
+import {API} from '../../../utils/api'
 
 export const ingredientsReducer = createApi({
   reducerPath: 'ingredientsReducer',

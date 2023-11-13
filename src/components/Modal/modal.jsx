@@ -4,27 +4,23 @@ import styles from './modal.module.css';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import useModalClosing from '../../hooks/useModalClosing';
+import useModalClosing from '../../custom-hooks/useModalClosing';
 
 
 
-function Modal({ children, id, setModal, modalClose, title, ...rest }) {
+function Modal({ children, id, setModal=true, modalClose, ...rest }) {
 
   useModalClosing(id, setModal, modalClose);
 
 
   return createPortal(
     <ModalOverlay id={id} setModal={setModal} {...rest}>
-      <div className={`${styles.wrapper} p-10`}>
-        <div className={styles.header}>
-          <h2 className="text text_type_main-large">{title}</h2>
+      <div className={`${styles.wrapper}`}>
           <button className="btn-default" onClick={modalClose}>
           <CloseIcon type="primary"/>
           </button>
-        </div>
         {children}
         </div>
-
     </ModalOverlay>,
     document.getElementById('modal')
   );
@@ -33,8 +29,12 @@ function Modal({ children, id, setModal, modalClose, title, ...rest }) {
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
   id: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  modalClose: PropTypes.func
+  modalClose: PropTypes.func,
+  setModal: PropTypes.bool,
 };
+
+Modal.defaultProps = {
+  setModal: true,
+}
 
 export default Modal;

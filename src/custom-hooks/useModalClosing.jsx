@@ -6,8 +6,8 @@ export default function useModalClosing(id, open, handleClose) {
   useEffect(() => {
     if (!open) return;
 
-    const closeModal = (evt) => {
-      if (evt?.target?.id === id || evt?.key === 'Escape') {
+    const closeModal = (event) => {
+      if (event?.target?.id === id || event?.key === 'Escape') {
         handleClose();
       }
     };

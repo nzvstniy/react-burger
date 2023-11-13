@@ -33,6 +33,10 @@ code {
   border: none;
   cursor: pointer;
   padding: 0;
+  position: absolute;
+  align-items: center;
+  right: 40px;
+  top: 48px;
 }
 
 .my-scroll::-webkit-scrollbar {
@@ -50,3 +54,6 @@ code {
   border-radius: none;
 }
 
+button{
+  cursor: pointer;
+}
