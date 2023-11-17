@@ -3,7 +3,7 @@ import { API } from "../../../utils/api";
 import jwtDecode from "jwt-decode";
 import dayjs from "dayjs";
 import { IAccessToken, IUserAuthResponse, IUserEdit, IUserEditResponse, IUserLogin, IUserRegistration } from "./user-types";
-import { request } from "../../../utils/request";
+import { checkResponse, request } from "../../../utils/request";
 const checkAccessToken = (token: string): boolean => {
     const MS = 1;
     const expiration = jwtDecode<IAccessToken>(token).exp;
@@ -22,19 +22,13 @@ const refreshingToken = async () => {
                 token: localStorage.getItem("refreshToken"),
             }),
         })
-    if (!res.ok) {
-        return Promise.reject(new Error(`Ошибка ${res.status}`))
-    }
-    return res.json();
+    return checkResponse(res);
 };
 
 const requestWithRefresh = async (endpoint: string, options: RequestInit, baseUrl = API.baseUrl) => {
     try {
         const res = await fetch(`${baseUrl}${endpoint}`, options);
-        if (!res.ok) {
-            return Promise.reject(new Error(`Ошибка ${res.status}`))
-        }
-        return await res.json();
+        return await checkResponse(res);
     }
     catch (error: any) {
         if (error.message === 'token expired') {
@@ -45,10 +39,7 @@ const requestWithRefresh = async (endpoint: string, options: RequestInit, baseUr
                 ...options.headers, authorization: accessToken.split(' ')[1],
             }
             const res = await fetch(`${baseUrl}${endpoint}`, options);
-            if (!res.ok) {
-                return Promise.reject(new Error(`Ошибка ${res.status}`))
-            }
-            return res.json();
+            return checkResponse(res);
         } else {
             return Promise.reject(error);
         }

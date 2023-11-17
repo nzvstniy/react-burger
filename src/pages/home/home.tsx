@@ -1,4 +1,3 @@
-import AppHeader from "../../components/AppHeader/app-header";
 import OrderConstructor from "../../components/OrderConstructor/order-constructor";
 import Preload from "../../components/Preload/preload";
 import { useGetIngredientsQuery } from "../../services/reducer-selector-directory/ingredients/ingredients-reducer";
@@ -13,7 +12,6 @@ const HomePage = () => {
     
     return (
         <>
-            <AppHeader />
             {isLoading ?
                 (<div className={styles.preload}><Preload /></div>) : <OrderConstructor />
             }

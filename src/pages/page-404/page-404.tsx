@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import AppHeader from '../../components/AppHeader/app-header';
 import styles from './page-404.module.css';
 import Lottie from "lottie-react";
 import animationData from './404-animation.json'
@@ -14,7 +13,7 @@ function Page404() {
 
   return (
     <>
-      <AppHeader />
+      
       <main>
         <div className={styles.wrapper}>
           <div className={styles.text}>

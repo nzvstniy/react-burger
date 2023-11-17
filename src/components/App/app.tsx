@@ -20,6 +20,7 @@ import { useGetIngredientsQuery } from '../../services/reducer-selector-director
 import { RESET_INGREDIENT_DETAILS } from '../../services/reducer-selector-directory/currentIngredient/current-ingredient-slice';
 import ProfileOrdersPage from '../../pages/user/profile-orders/profile-orders';
 import { useStoreDispatch } from '../../services/hooks';
+import AppHeader from '../AppHeader/app-header';
 
 function App() {
   const dispatch = useStoreDispatch();
@@ -43,6 +44,7 @@ function App() {
 
   return (
     <>
+      <AppHeader />
       <Routes location={background || location}>
         <Route path={ROUTES.home} element={<HomePage />} />
         <Route

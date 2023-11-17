@@ -1,4 +1,3 @@
-import AppHeader from '../AppHeader/app-header';
 import styles from './entry-form.module.css';
 import { FC, FormEvent, ReactNode } from 'react';
 
@@ -11,7 +10,6 @@ interface IEntryProps {
 
 const Entry: FC<IEntryProps> = ({ children, heading, links, onSubmit }) => (
     <>
-        <AppHeader />
         <main>
             <div className={styles.wrapper}>
                 <form className={styles.form} noValidate onSubmit={onSubmit}>
