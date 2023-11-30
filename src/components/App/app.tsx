@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, useNavigationType, NavigationType } from 'react-router-dom';
 import { ROUTES } from '../../utils/api';
 import HomePage from '../../pages/home/home';
 import RegisterPage from '../../pages/register/register';
@@ -7,7 +7,6 @@ import ForgotPasswordPage from '../../pages/forgot-password/forgot-password';
 import ResetPasswordPage from '../../pages/reset-password/reset-password';
 import ProfilePage from '../../pages/user/profile/profile';
 import { useEffect } from 'react';
-import UserInfo from '../../pages/user/user-info/user-info';
 import Page404 from '../../pages/page-404/page-404';
 import { NotAuth, Auth } from '../../higher-order-component/protected-route';
 import FeedPage from '../../pages/feed/feed';
@@ -18,15 +17,18 @@ import Modal from '../Modal/modal';
 import IngredientDetails from '../IngredientDetails/ingredient-details';
 import { useGetIngredientsQuery } from '../../services/reducer-selector-directory/ingredients/ingredients-reducer';
 import { RESET_INGREDIENT_DETAILS } from '../../services/reducer-selector-directory/currentIngredient/current-ingredient-slice';
-import ProfileOrdersPage from '../../pages/user/profile-orders/profile-orders';
-import { useStoreDispatch } from '../../services/hooks';
+import { useAppDispatch } from '../../services/hooks';
 import AppHeader from '../AppHeader/app-header';
+import OrderDetailsPage from '../../pages/order-details/order-details';
+import ProfileOrdersPage from '../../pages/user/profile-orders/profile-orders';
+import UserInfoPage from '../../pages/user/user-info/user-info';
+import OrderInfo from '../OrderInfo/order-info';
 
 function App() {
-  const dispatch = useStoreDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const navigationType = useNavigationType();
   useEffect(() => {
     dispatch(checkUserAuth());
   }, []);
@@ -40,7 +42,6 @@ function App() {
   };
 
   useGetIngredientsQuery();
-
 
   return (
     <>
@@ -59,9 +60,18 @@ function App() {
           path={ROUTES.user.profile}
           element={<Auth component={<ProfilePage />} />}
         >
-          <Route index element={<UserInfo />} />
+          <Route index element={<UserInfoPage />} />
           <Route path={ROUTES.user.orders} element={<ProfileOrdersPage />} />
         </Route>
+        <Route
+          path={ROUTES.orderDetails}
+          element={<CheckAuth component={<OrderDetailsPage />} />}
+        />
+        
+        <Route
+          path={`${ROUTES.user.profile}/${ROUTES.user.orderDetails}`}
+          element={<Auth component={<OrderDetailsPage />} />}
+        />
         <Route
           path={ROUTES.sign.up}
           element={<NotAuth component={<RegisterPage />} />}
@@ -103,6 +113,43 @@ function App() {
           />
         </Routes>
       )}
+      {background?.pathname.endsWith(ROUTES.orders) &&
+        navigationType === NavigationType.Push && (
+          <Routes>
+            <Route
+              path={ROUTES.orderDetails}
+              element={
+                <CheckAuth
+                  component={
+                    <Modal id="order-info" modalClose={handleModalClose}>
+                      <OrderInfo hasWrapper />
+                    </Modal>
+                  }
+                />
+              }
+            />
+          </Routes>
+        )}
+
+      {background?.pathname.endsWith(
+        `${ROUTES.user.profile}/${ROUTES.user.orders}`
+      ) &&
+        navigationType === NavigationType.Push && (
+          <Routes>
+            <Route
+              path={`${ROUTES.user.profile}/${ROUTES.user.orderDetails}`}
+              element={
+                <Auth
+                  component={
+                    <Modal id="order-info" modalClose={handleModalClose}>
+                      <OrderInfo hasWrapper />
+                    </Modal>
+                  }
+                />
+              }
+            />
+          </Routes>
+        )}
     </>
   )
 }

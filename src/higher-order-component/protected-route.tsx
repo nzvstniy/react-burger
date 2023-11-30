@@ -4,7 +4,7 @@ import { checkUser, checkAuthStatus } from '../services/reducer-selector-directo
 import { ROUTES } from '../utils/api';
 import Preload from '../components/Preload/preload';
 import styles from './../pages/home/home.module.css'
-import { useStoreSelector } from '../services/hooks';
+import { useAppSelector } from '../services/hooks';
 
 interface IProtectedRouteProps {
     component: React.ReactElement;
@@ -14,8 +14,8 @@ interface IProtectedRouteProps {
 const ProtectedRoute: FC<IProtectedRouteProps> = ({ component, notAuth = false }) => {
 
     const location = useLocation();
-    const isAuthChecked = useStoreSelector(checkAuthStatus);
-    const user = useStoreSelector(checkUser);
+    const isAuthChecked = useAppSelector(checkAuthStatus);
+    const user = useAppSelector(checkUser);
 
     const { from } = location.state || { from: { pathname: ROUTES.home } };
 

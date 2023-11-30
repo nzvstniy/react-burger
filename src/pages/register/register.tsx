@@ -6,7 +6,7 @@ import { ROUTES } from '../../utils/api';
 import { register } from '../../services/reducer-selector-directory/user/user-thunk';
 import { isLoading } from '../../services/reducer-selector-directory/user/user-selector';
 import useFormData from '../../custom-hooks/useFormData';
-import { useStoreDispatch, useStoreSelector } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
 import { IUserRegistration } from '../../services/reducer-selector-directory/user/user-types';
 
 
@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const { data, handleData } = useFormData();
   const navigate = useNavigate();
 
-  const dispatch = useStoreDispatch();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,7 +61,7 @@ const RegisterPage = () => {
         htmlType="submit"
         type="primary"
         size="medium"
-        disabled={useStoreSelector(isLoading)}
+        disabled={useAppSelector(isLoading)}
       >
         Зарегистрироваться
       </Button>

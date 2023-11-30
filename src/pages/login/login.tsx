@@ -6,7 +6,7 @@ import { ROUTES } from '../../utils/api';
 import { login } from '../../services/reducer-selector-directory/user/user-thunk';
 import useFormData from '../../custom-hooks/useFormData';
 import { isLoading } from '../../services/reducer-selector-directory/user/user-selector';
-import { useStoreDispatch, useStoreSelector } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
 import { IUserLogin } from '../../services/reducer-selector-directory/user/user-types';
 
 
@@ -14,7 +14,7 @@ const LoginPage = () => {
     const { data, handleData } = useFormData();
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useStoreDispatch();
+    const dispatch = useAppDispatch();
 
     const links = (
         <>
@@ -70,7 +70,7 @@ const LoginPage = () => {
                 htmlType="submit"
                 type="primary"
                 size="medium"
-                disabled={useStoreSelector(isLoading)}
+                disabled={useAppSelector(isLoading)}
                 >
                 Войти
             </Button>

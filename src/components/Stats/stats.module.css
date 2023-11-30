@@ -1,0 +1,9 @@
+
+.status {
+    display: grid;
+    grid-template-columns: repeat(2, 46.9%);
+    justify-content: space-between;
+}
+.section > *:not(:first-child) {
+    margin-top: 60px;
+}

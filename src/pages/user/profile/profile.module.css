@@ -1,8 +1,12 @@
 .wrapper {
-    display: grid;
-    grid-template-columns: 25.8% 69.4%;
-    column-gap: 60px;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 120px 0 512px;
-  }
+  display: grid;
+  grid-template-columns: 25.8% 69.4%;
+  column-gap: 60px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 120px 0 512px;
+}
+.orders {
+  grid-template-columns: 25.8% 70.4%;
+  column-gap: 48px;
+}

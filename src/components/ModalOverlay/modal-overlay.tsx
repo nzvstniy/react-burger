@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 import styles from './modal-overlay.module.css';
+import classNames from 'classnames';
 
 export interface IModalOverlayProps {
   children: ReactNode;
@@ -9,12 +10,13 @@ export interface IModalOverlayProps {
 }
 
 const ModalOverlay: FC<IModalOverlayProps> = ({
-  children, id, setModal, isLoading = false,
+  children, id, setModal,
 }) => (
 
   <div
-    className={`${styles.overlay}${(!isLoading && setModal && ` ${styles.opened}`) || ''
-      }`}
+    className={classNames(styles.overlay, {
+      [styles.opened]: setModal,
+    })}
     id={id}
   >
     {children}

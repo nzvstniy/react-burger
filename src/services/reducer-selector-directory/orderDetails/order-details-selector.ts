@@ -1,5 +1,5 @@
-import { StoreState } from "../../store";
+import { RootState } from "../../store";
 
 
-export const isLoading = (state: StoreState) => state.orderDetails.status;
-export const getNewOrder = (state: StoreState) => state.orderDetails.order?.order.number;
+export const isLoading = (state: RootState) => state.orderDetails.status;
+export const getNewOrder = (state: RootState) => state.orderDetails.order?.order.number;

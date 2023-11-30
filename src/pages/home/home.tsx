@@ -12,8 +12,7 @@ const HomePage = () => {
     
     return (
         <>
-            {isLoading ?
-                (<div className={styles.preload}><Preload /></div>) : <OrderConstructor />
+            {isLoading ? <Preload /> : <OrderConstructor />
             }
         </>
     )

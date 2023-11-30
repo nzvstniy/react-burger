@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IOrderSuccess, IOrderFail } from './order-details.type';
+import { IOrderSuccess, IOrderFail } from './order-details-type';
 import sendOrder from './order-details-request';
 
 type TOrderDetailsSliceState = {

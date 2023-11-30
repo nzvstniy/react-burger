@@ -1,25 +1,21 @@
-import React from 'react';
 import styles from './order-details.module.css';
-import orderImg from '../../images/orderDone.png';
-import { getNewOrder } from '../../services/reducer-selector-directory/orderDetails/order-details-selector';
-import Preload from '../Preload/preload';
-import { useStoreSelector } from '../../services/hooks';
+import PendingOrder from './PendingOrder/pending-order';
+import FulfilledOrder from './FulfilledOrder/fulfilled-order';
 
-const OrderDetails = () => {
-
-  const newOrder = useStoreSelector(getNewOrder);
-
-  return newOrder ? (
-    <div className={styles.wrapper}>
-      <h2 className={`${styles.neon} text text_type_digits-large mb-8`}> {newOrder} </h2>
-      <p className="text text_type_main-medium ">Идентификатор заказа</p>
-      <img src={orderImg} alt="Заказ готов" className="mt-15 mb-15" />
-      <p className="text text_type_main-small mb-2">Ваш заказ начали готовить</p>
-      <p className="text text_type_main-small text_color_inactive">
-        Дождитесь готовности на орбитальной станции
-      </p>
-    </div>
-  ) : (<Preload />);
+interface IOrderDetailsProps{
+  isPending: boolean;
 }
+
+const OrderDetails = ({ isPending }: IOrderDetailsProps) => (
+  <div className={styles.wrapper}>
+    {isPending ? <PendingOrder /> : <FulfilledOrder />}
+    <p className={`${styles.order} text text_type_main-default`}>
+      {isPending ? 'Ваш заказ начали готовить' : 'Ваш заказ готов'}
+    </p>
+    <p className={`${styles.ready} text text_type_main-default text_color_inactive`}>
+      {isPending ? 'Дождитесь готовности на орбитальной станции' : 'Приятного аппетита!'}
+    </p>
+  </div>
+);
 
 export default OrderDetails;

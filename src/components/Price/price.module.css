@@ -1,0 +1,10 @@
+.price {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    color: #fff;
+}
+.bigIcon > svg {
+    width: 33px;
+    height: 33px;
+}

@@ -6,7 +6,7 @@ import { CHANGE_POSITION } from '../../../services/reducer-selector-directory/in
 import DndTypes from '../../../utils/dnd-types';
 import styles from './ingredient-select-constructor.module.css'
 import { IIngredientKey } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
-import { useStoreDispatch } from '../../../services/hooks';
+import { useAppDispatch } from '../../../services/hooks';
 
 interface IDragItem {
   id: string;
@@ -27,7 +27,7 @@ const IngredientSelect: FC<IIngredientSelectProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const dispatch = useStoreDispatch();
+  const dispatch = useAppDispatch();
 
   const { _id } = ingredient;
 

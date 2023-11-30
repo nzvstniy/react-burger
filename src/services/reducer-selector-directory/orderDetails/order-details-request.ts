@@ -1,23 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IOrderFail, IOrderSuccess } from "./order-details.type";
+import { IOrderFail, IOrderSuccess } from "./order-details-type";
 import { API } from "../../../utils/api";
-import { checkResponse } from "../../../utils/request";
+import { request } from "../../../utils/request";
 
-const sendOrder = createAsyncThunk<IOrderSuccess, string[], { rejectValue: IOrderFail }>('orderDetails/sendOrder', async (order) => {
-    const res = await fetch(`${API.baseUrl}${API.endpoints.orders}`, {
+type TOrder = {
+    order: string[];
+    token: string;
+};
+
+const sendOrder = createAsyncThunk<IOrderSuccess, TOrder, { rejectValue: IOrderFail }>('orderDetails/sendOrder', async (data) => {
+    const { order, token } = data;
+
+    return request(API.endpoints.orders, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ ingredients: order }),
     });
-    return await checkResponse(res) as unknown as IOrderSuccess;
-    /*
-    if (!res.ok) {
-        return Promise.reject(new Error(`Ошибка ${res.status}`));
-    }
-    return (await res.json()) as IOrderSuccess;
-    */
 });
 
 export default sendOrder;
