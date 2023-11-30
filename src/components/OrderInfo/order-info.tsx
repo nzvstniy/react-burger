@@ -9,7 +9,7 @@ import Price from "../Price/price";
 import { getOrderFeed } from "../../services/reducer-selector-directory/orderFeed/order-feed-selector";
 import { getProfileOrderFeed } from "../../services/reducer-selector-directory/profileOrderFeed/profile-order-feed-selector";
 import styles from './order-info.module.css';
-import getStatus from "../../utils/get-status";
+import getStatus from "../../utils/assist/get-status";
 import OrderIngredients from "./OrderIngredients/order-ingredients";
 
 interface IOrderInfoProps {
@@ -48,7 +48,7 @@ const OrderInfo = ({
         return (
             <div className={classNames({ [styles.wrapper]: hasWrapper })}>
                 <h1 className={`text text_type_main-medium ${styles.notFoundHeading}`}>
-                    Заказ с таким идентификатором не найден, либо ссылка устарела
+                    Заказ не найден
                 </h1>
             </div>
         );
@@ -76,7 +76,7 @@ const OrderInfo = ({
             });
     });
 
-    const localLangStatus = getStatus(status);
+    const statusLocal = getStatus(status);
 
     return (
         <div className={classNames({ [styles.wrapper]: hasWrapper })}>
@@ -96,7 +96,7 @@ const OrderInfo = ({
                         [styles.blue]: status === 'done',
                     })}
                 >
-                    {localLangStatus}
+                    {statusLocal}
                 </span>
             </div>
             <div className={styles.ingredients}>

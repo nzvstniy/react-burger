@@ -11,12 +11,14 @@ import styles from './feed.module.css';
 const FeedPage = () => {
   const dispatch = useAppDispatch();
 
-  const wsOrdersAll = `${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.ordersAll}`;
+  //const wsOrdersAll = ${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.ordersAll};
 
   useEffect(() => {
-    dispatch(orderFeedConnect(wsOrdersAll));
+    dispatch(orderFeedConnect(`${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.ordersAll}`));
 
-    return () => dispatch(orderFeedDisconnect()) as unknown as void;
+    return () => {
+      dispatch(orderFeedDisconnect()) 
+    };
   }, []);
 
   const orders = useAppSelector(getOrderFeed);
@@ -26,7 +28,7 @@ const FeedPage = () => {
       {orders ? (
         <main>
           <div className={styles.wrapper}>
-            <h1 className={styles.heading}>Лента заказов</h1>
+            <h1 className={`${styles.heading} text text_type_main-large`}>Лента заказов</h1>
             <div className={styles.gallery}>
               <Orders
                 ordersData={orders}

@@ -9,31 +9,29 @@ import Orders from '../../../components/Orders/orders';
 
 const ProfileOrdersPage = () => {
     const dispatch = useAppDispatch();
-    const wsProfileOrders = `${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.userOrders}?token=${localStorage.getItem('accessToken')}`;
+    //const wsProfileOrders = `${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.userOrders}?token=${localStorage.getItem('accessToken')}`;
 
     useEffect(() => {
-        dispatch(profileConnect(wsProfileOrders));
-        return () => dispatch(profileDisconnect()) as unknown as void;
+        dispatch(profileConnect(`${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.userOrders}`));
+        return () => {
+            dispatch(profileDisconnect());
+        }
     }, []);
 
     const ordersData = useAppSelector(getProfileOrderFeed);
 
-    let reverseOrdersData: TWebSocketOrders | undefined;
+    if (!ordersData) return <Preload />;
 
-    if (ordersData) {
-        const { orders, success, total, totalToday } = ordersData;
-        const reverseOrders = orders.slice().reverse();
-        reverseOrdersData = { orders: reverseOrders, success, total, totalToday };
-    }
+    const { orders, success, total, totalToday } = ordersData;
+    const reverseOrders = orders.slice().reverse();
+    const reverseOrdersData = { orders: reverseOrders, success, total, totalToday };
 
-    return reverseOrdersData ? (
+    return (
         <Orders
             ordersData={reverseOrdersData}
             dynamicRoute={`${ROUTES.user.profile}/${ROUTES.user.orders}`}
             status
         />
-    ) : (
-        <Preload />
     );
 };
 

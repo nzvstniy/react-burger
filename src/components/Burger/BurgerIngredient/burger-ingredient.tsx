@@ -4,7 +4,7 @@ import styles from './burger-ingredient.module.css';
 import { getBunSelect, getIngredientsSelect } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-selector';
 import { useDrag } from 'react-dnd/dist/hooks';
 import DndTypes from '../../../utils/dnd-types';
-import ingredientsCounter from '../../../utils/calculate/ingredients-counter';
+import ingredientsCounter from '../../../utils/assist/ingredients-counter';
 import { useLocation, Link } from 'react-router-dom';
 import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
 import { useAppSelector } from '../../../services/hooks';

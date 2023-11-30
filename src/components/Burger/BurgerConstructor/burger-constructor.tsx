@@ -15,7 +15,7 @@ import { useModal } from '../../../custom-hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 import { checkUser } from '../../../services/reducer-selector-directory/user/user-selector';
 import { ROUTES } from '../../../utils/api';
-import priceCounter from '../../../utils/calculate/price-counter';
+import priceCounter from '../../../utils/assist/price-counter';
 import { useAppDispatch, useAppSelector } from '../../../services/hooks';
 import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
 import IngredientSelect from '../IngredientSelectConstructor/ingredient-select-constructor';

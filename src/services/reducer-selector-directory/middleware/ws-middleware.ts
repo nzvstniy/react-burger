@@ -43,7 +43,7 @@ const wsMiddleware =
         (store) => {
             let socket: WebSocket | null = null;
             let hasDisconnected = false;
-
+            let url = '';
             return (next) => (action) => {
                 const { dispatch } = store;
                 const {
@@ -56,8 +56,11 @@ const wsMiddleware =
                     onError,
                 } = wsActions;
 
-                if (wsConnect.match(action)) {
-                    socket = new WebSocket(action.payload);
+                
+                const jwt = localStorage.getItem('accessToken');
+                url = `${action.payload}?token=${jwt}`;
+                if (wsConnect.match(action) && jwt) {
+                    socket = new WebSocket(url);
                     dispatch(wsConnecting());
                 }
 
@@ -85,6 +88,7 @@ const wsMiddleware =
 
                     if (wsDisconnect.match(action)) {
                         hasDisconnected = true;
+                        if (socket.readyState === 1)
                         socket.close();
                         socket = null;
                     }

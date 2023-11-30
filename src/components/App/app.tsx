@@ -33,7 +33,25 @@ function App() {
     dispatch(checkUserAuth());
   }, []);
 
-  const background = location.state?.background;
+  const background:
+    | {
+      hash: string;
+      key: string;
+      pathname: string;
+      search: string;
+      state: null | unknown;
+    }
+    | undefined = location.state?.background;
+
+  let backgroundLocation;
+
+  if (
+    background &&
+    (location.pathname.includes(ROUTES.ingredients) ||
+      navigationType !== NavigationType.Pop)
+  ) {
+    backgroundLocation = background;
+  }
 
   const handleModalClose = () => {
 
@@ -46,7 +64,7 @@ function App() {
   return (
     <>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={backgroundLocation || location}>
         <Route path={ROUTES.home} element={<HomePage />} />
         <Route
           path={ROUTES.ingredientDetails}
@@ -67,7 +85,7 @@ function App() {
           path={ROUTES.orderDetails}
           element={<CheckAuth component={<OrderDetailsPage />} />}
         />
-        
+
         <Route
           path={`${ROUTES.user.profile}/${ROUTES.user.orderDetails}`}
           element={<Auth component={<OrderDetailsPage />} />}
@@ -94,7 +112,7 @@ function App() {
         />
       </Routes>
 
-      {background && (
+      {background?.pathname === ROUTES.home && (
         <Routes>
           <Route
             path={ROUTES.ingredientDetails}
@@ -113,6 +131,7 @@ function App() {
           />
         </Routes>
       )}
+
       {background?.pathname.endsWith(ROUTES.orders) &&
         navigationType === NavigationType.Push && (
           <Routes>
@@ -121,7 +140,9 @@ function App() {
               element={
                 <CheckAuth
                   component={
-                    <Modal id="order-info" modalClose={handleModalClose}>
+                    <Modal 
+                    id="order-info" 
+                    modalClose={handleModalClose}>
                       <OrderInfo hasWrapper />
                     </Modal>
                   }
@@ -141,7 +162,9 @@ function App() {
               element={
                 <Auth
                   component={
-                    <Modal id="order-info" modalClose={handleModalClose}>
+                    <Modal 
+                    id="order-info" 
+                    modalClose={handleModalClose}>
                       <OrderInfo hasWrapper />
                     </Modal>
                   }
@@ -150,6 +173,7 @@ function App() {
             />
           </Routes>
         )}
+  
     </>
   )
 }

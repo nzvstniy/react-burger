@@ -8,8 +8,10 @@ import OrderInfo from '../../components/OrderInfo/order-info';
 
 const OrderDetailsPage = () => {
     const dispatch = useAppDispatch();
-
+   
+    
     useEffect(() => {
+        /*
         const wsOrdersAll = `${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.ordersAll}`;
         let wsProfileOrders: string | undefined;
         const jwt = localStorage.getItem('accessToken');
@@ -17,13 +19,16 @@ const OrderDetailsPage = () => {
             wsProfileOrders = `${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.userOrders}?token=${localStorage.getItem('accessToken')}`;
             dispatch(profileConnect(wsProfileOrders));
         }
-        dispatch(orderFeedConnect(wsOrdersAll));
+        */
+        dispatch(profileConnect(`${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.userOrders}`));
+        dispatch(orderFeedConnect(`${WEBSOCKET.baseUrl}${WEBSOCKET.endpoints.ordersAll}`));
 
         return () => {
-            dispatch(orderFeedDisconnect()) as unknown as void;
-            dispatch(profileDisconnect()) as unknown as void;
+            dispatch(orderFeedDisconnect());
+            dispatch(profileDisconnect()) ;
         }
     }, []);
+    
     return (
         <>
             <main className={styles.main}>

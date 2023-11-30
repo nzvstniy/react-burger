@@ -4,7 +4,7 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import OrderIcons from './OrderIcons/order-icons';
-import getStatus from '../../utils/get-status';
+import getStatus from '../../utils/assist/get-status';
 import classNames from 'classnames';
 import Price from '../Price/price';
 import styles from './order-cards.module.css';

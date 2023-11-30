@@ -33,7 +33,7 @@ const Orders = ({
                     let totalPrice = 0;
 
                     order.ingredients.forEach((id) => {
-                        const { price, image } = map.get(id) as IIngredient;
+                        const { price, image } = map.get(id) as IIngredient || {};
 
                         totalPrice += price;
                         previewIcons.push(image);
