@@ -26,7 +26,7 @@ import {
 
 import { refreshingToken } from '../user/user-thunk';
 //import { requestWithRefresh } from '../user/user-thunk';
-import { API } from '../../../utils/api';
+import { API, WEBSOCKET } from '../../../utils/api';
 
 export type TWsActionTypes = {
     wsConnecting: ActionCreatorWithoutPayload;
@@ -56,13 +56,27 @@ const wsMiddleware =
                     onError,
                 } = wsActions;
 
-                
+
                 const jwt = localStorage.getItem('accessToken');
                 url = `${action.payload}?token=${jwt}`;
-                if (wsConnect.match(action) && jwt) {
+                if (wsConnect.match(action) && action.payload.endsWith('orders/all')) {
+
+                    socket = new WebSocket(action.payload);
+                    dispatch(wsConnecting());
+                }
+                else if (wsConnect.match(action)) {
                     socket = new WebSocket(url);
                     dispatch(wsConnecting());
                 }
+                /*
+                if (wsConnect.match(action) && jwt) {
+                    console.log(action.payload)
+                    socket = new WebSocket(url);
+                    dispatch(wsConnecting());
+                }
+                */
+
+
 
                 if (socket) {
                     socket.onopen = () => dispatch(onOpen());
@@ -89,7 +103,7 @@ const wsMiddleware =
                     if (wsDisconnect.match(action)) {
                         hasDisconnected = true;
                         if (socket.readyState === 1)
-                        socket.close();
+                            socket.close();
                         socket = null;
                     }
                 }
