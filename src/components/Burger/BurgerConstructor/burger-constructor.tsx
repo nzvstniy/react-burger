@@ -3,7 +3,7 @@ import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-co
 import OrderDetails from '../../OrderDetails/order-details';
 import Modal from '../../Modal/modal';
 import { useState, useEffect, useMemo, FormEvent } from 'react'
-import { REMOVE_INGREDIENT, ADD_INGREDIENT, RESET } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-slice';
+import { REMOVE_INGREDIENT, ADD_INGREDIENT, RESET, ADD_BUN } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-slice';
 import { getBunSelect, getIngredientsSelect } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-selector';
 import { v4 as uuidv4 } from 'uuid';
 import DndTypes from '../../../utils/dnd-types';
@@ -17,7 +17,7 @@ import { checkUser } from '../../../services/reducer-selector-directory/user/use
 import { ROUTES } from '../../../utils/api';
 import priceCounter from '../../../utils/assist/price-counter';
 import { useAppDispatch, useAppSelector } from '../../../services/hooks';
-import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
+import { IIngredient, IIngredientId, IIngredientKey } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
 import IngredientSelect from '../IngredientSelectConstructor/ingredient-select-constructor';
 import Price from '../../Price/price';
 import classNames from 'classnames';
@@ -55,7 +55,11 @@ const BurgerConstructor = () => {
         ingredientDrop: monitor.getItem()?.type,
       }),
       drop: (ingredient: IIngredientId) => {
-        dispatch(ADD_INGREDIENT({ ingredient, key: uuidv4() }));
+        const data = { ingredient, key: uuidv4() };
+
+        dispatch(
+          ingredient.type === 'bun' ? ADD_BUN(data) : ADD_INGREDIENT(data)
+        );
       },
     }),
     []
@@ -83,6 +87,7 @@ const BurgerConstructor = () => {
 
     dispatch(sendOrder({ order, token }))
       .then((res) => {
+        //@ts-ignore
         if (res.payload?.success) dispatch(RESET());
       })
       .catch((error) => console.error(`Ошибка: ${error}`));
@@ -97,7 +102,7 @@ const BurgerConstructor = () => {
   return (
     <>
       <section aria-label="Оформление заказа">
-        <form className={styles.order} ref={drop} onSubmit={handleNewOrder}>
+        <form className={styles.order} data-test="order" ref={drop} onSubmit={handleNewOrder}>
           <BunSelect
             bunSelect={bunSelect}
             isOver={isOver}
@@ -108,7 +113,7 @@ const BurgerConstructor = () => {
 
           {(ingredientsSelect.length && (
             <div className={`${styles.components} my-scroll`}>
-              {ingredientsSelect.map((ingredient, index) => (
+              {ingredientsSelect.map((ingredient: IIngredientKey, index: number) => (
                 <IngredientSelect
                   key={`component-${ingredient.key}`}
                   ingredient={ingredient}
@@ -118,12 +123,12 @@ const BurgerConstructor = () => {
               ))}
             </div>
           )) || (
-            <div
-            className={classNames(styles.componentsEmpty, {
-              [styles.containerEmptyDrop]:
-                isOver && ingredientDrop !== 'bun',
-            })}
-          >
+              <div
+                className={classNames(styles.componentsEmpty, {
+                  [styles.containerEmptyDrop]:
+                    isOver && ingredientDrop !== 'bun',
+                })}
+              >
                 <span className="text text_type_main-small">Добавьте начинку</span>
               </div>
             )}
@@ -138,8 +143,8 @@ const BurgerConstructor = () => {
 
           <div className={styles.info}>
             <Price type="total" totalPrice={totalPrice} size="big" />
-            <Button htmlType={ status ? 'button' : 'submit' } type="primary" size="large" disabled={isDisabled}>
-              { status ? 'Загрузка...' : 'Оформить заказ' }
+            <Button htmlType={status ? 'button' : 'submit'} type="primary" size="large" disabled={isDisabled} data-test="orderBtn">
+              {status ? 'Загрузка...' : 'Оформить заказ'}
             </Button>
           </div>
         </form>
@@ -152,7 +157,7 @@ const BurgerConstructor = () => {
         isLoading={status}
       >
 
-        <OrderDetails isPending={status}/>
+        <OrderDetails isPending={status} />
       </Modal>
 
 

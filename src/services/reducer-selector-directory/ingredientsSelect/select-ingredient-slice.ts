@@ -8,21 +8,25 @@ type TIngredientSliceState = {
 
 
 
-const initialState: TIngredientSliceState = { bun: null, ingredients: [] };
+export const initialState: TIngredientSliceState = {
+  bun: null,
+  ingredients: []
+};
 
 const ingredientsSelectSlice = createSlice({
   name: 'ingredientsSelect',
   initialState,
   reducers: {
-    ADD_INGREDIENT: (state, { payload }) => {
-      const { key, ingredient } = payload;
+    ADD_INGREDIENT: (state, action) => {
+      const { key, ingredient } = action.payload;
       const data = { ...ingredient, key, };
+      state.ingredients.push(data);
+    },
 
-      if (ingredient.type === 'bun') {
-        state.bun = data;
-      } else {
-        state.ingredients.push(data);
-      }
+    ADD_BUN: (state, action) => {
+      const { key, ingredient } = action.payload;
+      const data = { ...ingredient, key, };
+      state.bun = data;
     },
 
     CHANGE_POSITION: (state, { payload: { dragIndex, hoverIndex } }) => {
@@ -43,6 +47,6 @@ const ingredientsSelectSlice = createSlice({
     RESET: () => initialState,
   },
 });
-export const { ADD_INGREDIENT, CHANGE_POSITION, REMOVE_INGREDIENT, RESET, } = ingredientsSelectSlice.actions;
+export const { ADD_INGREDIENT, CHANGE_POSITION, REMOVE_INGREDIENT, RESET, ADD_BUN } = ingredientsSelectSlice.actions;
 
 export default ingredientsSelectSlice.reducer;

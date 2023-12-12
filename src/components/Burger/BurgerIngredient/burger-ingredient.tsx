@@ -10,6 +10,7 @@ import { IIngredient, IIngredientId } from '../../../services/reducer-selector-d
 import { useAppSelector } from '../../../services/hooks';
 import { ROUTES } from '../../../utils/api';
 import Price from '../../Price/price';
+import classNames from 'classnames';
 
 interface IBurgerIngredient {
   ingredient: IIngredientId;
@@ -41,7 +42,7 @@ const BurgerIngredient = ({ ingredient }: IBurgerIngredient) => {
       state={{ background: location }}>
       <div ref={dragPreview} role="button" tabIndex={0}>
         <article
-          className={`${styles.card} ${isDragging && styles.cardDragging}`}
+          className={classNames(styles.card, { [styles.cardDragging]: isDragging })}
           ref={drag}
         >
           {(counter && <Counter count={counter} size="default" />) || null}

@@ -8,7 +8,7 @@ export type TOrderFeedStore = {
     connectError: string;
 };
 
-const initialState: TOrderFeedStore = {
+export const initialState: TOrderFeedStore = {
     status: WebSocketStatus.OFFLINE,
     orders: null,
     connectError: '',

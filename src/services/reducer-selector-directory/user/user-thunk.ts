@@ -25,31 +25,31 @@ const refreshingToken = async () => {
 */
 export const refreshingToken = async () => {
     try {
-      const res = await fetch(
-        `${API.baseUrl}${API.endpoints.user.refreshToken}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
+        const res = await fetch(
+            `${API.baseUrl}${API.endpoints.user.refreshToken}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
+            }
+        );
+
+        if (!res.ok) {
+            Promise.reject(new Error(`Error ${res.status}`));
         }
-      );
-  
-      if (!res.ok) {
-        Promise.reject(new Error(`Error ${res.status}`));
-      }
-  
-      const { accessToken, refreshToken } = await res.json();
-  
-      localStorage.setItem('accessToken', accessToken.split(' ')[1]);
-      localStorage.setItem('refreshToken', refreshToken);
-  
-      return localStorage.getItem('accessToken');
+
+        const { accessToken, refreshToken } = await res.json();
+
+        localStorage.setItem('accessToken', accessToken.split(' ')[1]);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        return localStorage.getItem('accessToken');
     } catch (err) {
-      console.error(`Error: ${err}`);
+        console.error(`Error: ${err}`);
     }
-  };
+};
 
 /*
 по какой-то причине ловлю 403, не пойму чо не так, надо ковыряться
@@ -140,20 +140,26 @@ export const register = createAsyncThunk<IUserAuthResponse, IUserRegistration, {
         });
     }
     catch (err) {
-        return rejectWithValue(`Ошибка регистрация: ${err}`);
+        return rejectWithValue(`Ошибка регистрации: ${err}`);
     }
 });
 
 
-export const login = createAsyncThunk<IUserAuthResponse,IUserLogin, { rejectValue: unknown }>('user/login', async (data) =>
-    request(API.endpoints.user.login, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-);
+export const login = createAsyncThunk<IUserAuthResponse, IUserLogin, { rejectValue: unknown }
+>('user/login', async (data, { rejectWithValue }) => {
+    try {
+        return await request(API.endpoints.user.login, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        return rejectWithValue(`User login error: ${err}`);
+    }
+});
+
 
 
 export const logout = createAsyncThunk('user/logout', async () => (

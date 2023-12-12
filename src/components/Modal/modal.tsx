@@ -16,11 +16,18 @@ interface IModalProps {
 const Modal: FC<IModalProps> = ({ children, id, setModal = true, modalClose, ...rest }) => {
 
   useModalClosing(id, setModal, modalClose);
-
+  if(!setModal) return null;
   return createPortal(
     <ModalOverlay id={id} setModal={setModal} {...rest}>
       <div className={styles.modal}>
-        <CloseIcon type="primary" onClick={modalClose} />
+      <button
+          className={styles.button}
+          data-test="close-button"
+          type="button"
+          onClick={modalClose}
+        >
+          <CloseIcon type="primary" />
+        </button>
         {children}
       </div>
     </ModalOverlay>,

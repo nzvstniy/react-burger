@@ -85,6 +85,7 @@ const IngredientSelect: FC<IIngredientSelectProps> = ({
         price={ingredient.price}
         thumbnail={ingredient.image}
         handleClose={removeIngredient}
+        
       />
     </div>
   );
