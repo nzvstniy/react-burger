@@ -4,18 +4,19 @@ import styles from './burger-ingredient.module.css';
 import { getBunSelect, getIngredientsSelect } from '../../../services/reducer-selector-directory/ingredientsSelect/select-ingredient-selector';
 import { useDrag } from 'react-dnd/dist/hooks';
 import DndTypes from '../../../utils/dnd-types';
-import ingredientsCounter from '../../../utils/calculate/ingredients-counter';
+import ingredientsCounter from '../../../utils/assist/ingredients-counter';
 import { useLocation, Link } from 'react-router-dom';
-import { IIngredient } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
-import { useStoreSelector } from '../../../services/hooks';
+import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
+import { useAppSelector } from '../../../services/hooks';
+import { ROUTES } from '../../../utils/api';
+import Price from '../../Price/price';
 
 interface IBurgerIngredient {
-  ingredient: IIngredient;
+  ingredient: IIngredientId;
 }
 
-const BurgerIngredient: FC<IBurgerIngredient> = ({
-  ingredient,
-}): ReactElement => {
+const BurgerIngredient = ({ ingredient }: IBurgerIngredient) => {
+
   const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
     type: DndTypes.Ingredient,
     item: ingredient,
@@ -27,8 +28,8 @@ const BurgerIngredient: FC<IBurgerIngredient> = ({
 
   const location = useLocation();
 
-  const bunSelect = useStoreSelector(getBunSelect);
-  const ingredientsSelect = useStoreSelector(getIngredientsSelect);
+  const bunSelect = useAppSelector(getBunSelect);
+  const ingredientsSelect = useAppSelector(getIngredientsSelect);
 
   const counter = useMemo(() => ingredientsCounter(ingredient, bunSelect, ingredientsSelect),
     [bunSelect, ingredientsSelect]
@@ -36,7 +37,7 @@ const BurgerIngredient: FC<IBurgerIngredient> = ({
 
 
   return (
-    <Link to={`/ingredients/${ingredient._id}`}
+    <Link to={`${ROUTES.ingredients}/${ingredient._id}`}
       state={{ background: location }}>
       <div ref={dragPreview} role="button" tabIndex={0}>
         <article
@@ -49,10 +50,7 @@ const BurgerIngredient: FC<IBurgerIngredient> = ({
             src={ingredient?.image}
             alt={`Ингредиент: ${ingredient?.name}`}
           />
-          <div className={`${styles.price} text text_type_main-default`}>
-            <span>{ingredient?.price}</span>
-            <CurrencyIcon type="primary"/>
-          </div>
+          <Price type="total" totalPrice={ingredient.price} size="small" />
           <h3 className="text text_type_main-default">{ingredient?.name}</h3>
         </article>
       </div>

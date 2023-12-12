@@ -5,16 +5,16 @@ import { editUser } from '../../../services/reducer-selector-directory/user/user
 import { getEmail, getName } from '../../../services/reducer-selector-directory/user/user-selector';
 import UserButton from '../user-button/user-button';
 import useFormData from '../../../custom-hooks/useFormData';
-import { useStoreDispatch, useStoreSelector } from '../../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../../services/hooks';
 import { IUserEdit } from '../../../services/reducer-selector-directory/user/user-types';
 
-const UserInfo = () => {
+const UserInfoPage = () => {
 
     const { data, setData, handleData } = useFormData();
 
-    const dispatch = useStoreDispatch();
-    const name = useStoreSelector(getName);
-    const email = useStoreSelector(getEmail);
+    const dispatch = useAppDispatch();
+    const name = useAppSelector(getName);
+    const email = useAppSelector(getEmail);
 
     const [buttonVisivility, setButtonVisibility] = useState(false);
 
@@ -69,4 +69,4 @@ const UserInfo = () => {
     )
 }
 
-export default UserInfo;
+export default UserInfoPage;

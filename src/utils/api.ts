@@ -13,7 +13,6 @@ export const API = Object.freeze({
       },
     },
     orders: '/orders',
-
     ingredients: '/ingredients',
   },
 
@@ -34,9 +33,18 @@ export const ROUTES = Object.freeze({
   user: {
     profile: '/profile',
     orders: 'orders',
+    orderDetails: 'orders/:id',
   },
   orders: '/feed',
   ingredientDetails: '/ingredients/:id',
-
+  orderDetails: '/feed/:id',
+  ingredients: '/ingredients',
 })
 
+export const WEBSOCKET = Object.freeze({
+  baseUrl: 'wss://norma.nomoreparties.space',
+  endpoints: {
+    ordersAll: '/orders/all',
+    userOrders: '/orders',
+  },
+});

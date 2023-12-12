@@ -1,5 +1,4 @@
-import { AnyAction, Middleware } from "redux";
-import { ThunkDispatch } from "redux-thunk";
+import { Middleware, ThunkDispatch, AnyAction } from '@reduxjs/toolkit';
 
 const authMiddleware : Middleware<unknown, unknown, ThunkDispatch<unknown, unknown, AnyAction>> = () => (next) => (action) => {
 

@@ -7,7 +7,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 const OrderConstructor = () => (
     <main className={styles.main}>
       <div className={styles.wrapper}>
-        <h1 className={styles.heading}>Соберите бургер</h1>
+        <h1 className={`${styles.heading} text text_type_main-large`}>Соберите бургер</h1>
         <div className={styles.shop}>
           <DndProvider backend={HTML5Backend}>
             <ConstructorComposition/>

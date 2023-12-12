@@ -1,0 +1,32 @@
+.wrapper {
+    padding: 60px 40px 40px;
+}
+.positionCenter {
+    text-align: center;
+}
+.name {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    margin: 40px 0 60px;
+}
+.namePageSingle {
+    row-gap: 13px;
+    margin-bottom: 65px;
+}
+.ingredients > *:first-child {
+    margin-bottom: 24px;
+}
+.blue {
+    color: #0cc;
+}
+.summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+}
+.notFoundHeading {
+    padding-top: 60px;
+    text-align: center;
+}

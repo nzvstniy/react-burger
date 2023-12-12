@@ -1,0 +1,19 @@
+.blue {
+    color: #0cc;
+}
+.white {
+    color: #fff;
+}
+.list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 200px;
+    margin-top: 24px;
+}
+.item{
+    margin-top: 8px;
+}
+li{
+    list-style-type: none;
+}

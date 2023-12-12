@@ -5,7 +5,8 @@ import styles from './sidebar.module.css';
 import { logout } from '../../services/reducer-selector-directory/user/user-thunk';
 import { isLoading } from '../../services/reducer-selector-directory/user/user-selector';
 import { FC } from 'react';
-import { useStoreDispatch, useStoreSelector } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
+import classNames from 'classnames';
 
 interface ISidebarProps {
     description: string;
@@ -28,9 +29,9 @@ const links: ILinks[] = [
 
 ];
 
-const Sidebar: FC<ISidebarProps> = ({ description }) => {
+const Sidebar = ({ description }: ISidebarProps) => {
 
-    const dispatch = useStoreDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -45,20 +46,21 @@ const Sidebar: FC<ISidebarProps> = ({ description }) => {
             <ul className={`${styles.links} text_type_main-medium text_color_inactive`}>
                 {links.map(({ name, url }) => (
                     <li className={styles.itemLinks} key={uuidv4()}>
-                        <Link className={`${styles.link}${(location.pathname.endsWith(url) && ` ${styles.activeLink}`) || ''}`}
-                            key={uuidv4()}
+                        <Link className={classNames(styles.link, {
+                            [styles.activeLink]: location.pathname.endsWith(url),
+                        })}
                             to={url}
                         >
                             {name}
                         </Link>
                     </li>
                 ))}
-                <li className={styles.itemLinks} key={uuidv4()}>
+                <li className={styles.itemLinks}>
                     <button
                         className={`${styles.link} ${styles.button} text_type_main-medium`}
                         type="button"
                         onClick={onLogout}
-                        disabled={useStoreSelector(isLoading)}
+                        disabled={useAppSelector(isLoading)}
                     >
                         Выход
                     </button>

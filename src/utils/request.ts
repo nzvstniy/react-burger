@@ -17,4 +17,3 @@ export const request = async (
     const res = await fetch(`${baseUrl}${endpoint}`, options);
     return checkResponse(res);
 }
-

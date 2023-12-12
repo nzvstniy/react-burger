@@ -1,5 +1,5 @@
-import { StoreState } from "../../store";
+import { RootState } from "../../store";
 
-const getCurrentIngredient = (state: StoreState) => state.currentIngredient.ingredient;
+const getCurrentIngredient = (state: RootState) => state.currentIngredient.ingredient;
 
 export default getCurrentIngredient;

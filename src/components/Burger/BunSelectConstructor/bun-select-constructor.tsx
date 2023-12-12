@@ -2,12 +2,12 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './bun-select-constructor.module.css'
-import { IIngredient } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
+import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
 import { FC } from 'react';
 
 
 interface IBunSelectProps {
-    bunSelect: IIngredient | null;
+    bunSelect: IIngredientId | null;
     isOver: boolean;
     ingredientDrop: string;
     posRu: 'верхняя' | 'нижняя';

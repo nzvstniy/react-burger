@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { FC, ReactElement, useEffect } from 'react';
 import { useGetIngredientsQuery } from '../../services/reducer-selector-directory/ingredients/ingredients-reducer';
 import { SHOW_INGREDIENT_DETAILS } from '../../services/reducer-selector-directory/currentIngredient/current-ingredient-slice';
-import { useStoreDispatch, useStoreSelector } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
 
 
 interface IIngredientDetailsProps {
@@ -20,10 +20,10 @@ interface INutritionalValue {
 const IngredientDetails: FC<IIngredientDetailsProps> = ({ isPageSingle = false, }): ReactElement => {
 
   const { data } = useGetIngredientsQuery();
-  const dispatch = useStoreDispatch();
+  const dispatch = useAppDispatch();
   const { id: _id } = useParams();
 
-  const currentIngredient = useStoreSelector(getCurrentIngredient);
+  const currentIngredient = useAppSelector(getCurrentIngredient);
 
   useEffect(() => {
     const res = data?.data.find((ingredient) => ingredient._id === _id);

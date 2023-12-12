@@ -1,6 +1,10 @@
-import { IIngredient } from "../../services/reducer-selector-directory/ingredients/ingredients-types";
+import { IIngredientId } from "../../services/reducer-selector-directory/ingredients/ingredients-types";
 
-const ingredientsCounter = (ingredient: IIngredient, bunSelect: IIngredient | null, ingredientsSelect: IIngredient[]) => {
+const ingredientsCounter = (
+    ingredient: IIngredientId,
+    bunSelect: IIngredientId | null,
+    ingredientsSelect: IIngredientId[]
+) => {
 
     let count = 0;
 

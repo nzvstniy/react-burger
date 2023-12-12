@@ -1,0 +1,11 @@
+.order {
+    filter: drop-shadow(0 4px 32px rgba(51, 51, 255, 0.5)) drop-shadow(0 0 8px rgba(51, 51, 255, 0.25)) drop-shadow(0 0 16px rgba(51, 51, 255, 0.25));
+}
+
+.heading {
+    padding-top: 33px;
+}
+
+.image {
+    padding-top: 68px;
+}

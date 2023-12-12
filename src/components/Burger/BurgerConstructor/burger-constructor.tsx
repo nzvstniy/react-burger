@@ -15,25 +15,27 @@ import { useModal } from '../../../custom-hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 import { checkUser } from '../../../services/reducer-selector-directory/user/user-selector';
 import { ROUTES } from '../../../utils/api';
-import priceCounter from '../../../utils/calculate/price-counter';
-import { useStoreDispatch, useStoreSelector } from '../../../services/hooks';
-import { IIngredient } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
+import priceCounter from '../../../utils/assist/price-counter';
+import { useAppDispatch, useAppSelector } from '../../../services/hooks';
+import { IIngredient, IIngredientId } from '../../../services/reducer-selector-directory/ingredients/ingredients-types';
 import IngredientSelect from '../IngredientSelectConstructor/ingredient-select-constructor';
+import Price from '../../Price/price';
+import classNames from 'classnames';
 
 const BurgerConstructor = () => {
 
   const { isModalOpen, modalOpen, modalClose } = useModal();
 
-  const dispatch = useStoreDispatch();
-  const status = useStoreSelector(isLoading);
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(isLoading);
 
-  const bunSelect = useStoreSelector(getBunSelect);
-  const ingredientsSelect = useStoreSelector(getIngredientsSelect);
+  const bunSelect = useAppSelector(getBunSelect);
+  const ingredientsSelect = useAppSelector(getIngredientsSelect);
 
   const [isDisabled, setIsDisabled] = useState(true);
 
   const navigate = useNavigate();
-  const user = useStoreSelector(checkUser);
+  const user = useAppSelector(checkUser);
 
   const totalPrice = useMemo(() => priceCounter('bun', bunSelect) + priceCounter('ingredients', ingredientsSelect),
     [bunSelect, ingredientsSelect]
@@ -52,7 +54,7 @@ const BurgerConstructor = () => {
         isOver: monitor.isOver(),
         ingredientDrop: monitor.getItem()?.type,
       }),
-      drop: (ingredient: IIngredient) => {
+      drop: (ingredient: IIngredientId) => {
         dispatch(ADD_INGREDIENT({ ingredient, key: uuidv4() }));
       },
     }),
@@ -72,13 +74,14 @@ const BurgerConstructor = () => {
       navigate(ROUTES.sign.in);
       return;
     }
-    if (!bunSelect || !ingredientsSelect.length) return;
+    const token = localStorage.getItem('accessToken');
+    if (!bunSelect || !ingredientsSelect.length || !token) return;
 
     const order = [bunSelect, ...ingredientsSelect, bunSelect].map(
       (ingredientsSelect) => ingredientsSelect._id
     );
 
-    dispatch(sendOrder(order))
+    dispatch(sendOrder({ order, token }))
       .then((res) => {
         if (res.payload?.success) dispatch(RESET());
       })
@@ -105,7 +108,7 @@ const BurgerConstructor = () => {
 
           {(ingredientsSelect.length && (
             <div className={`${styles.components} my-scroll`}>
-              {ingredientsSelect.map((ingredient, index: number) => (
+              {ingredientsSelect.map((ingredient, index) => (
                 <IngredientSelect
                   key={`component-${ingredient.key}`}
                   ingredient={ingredient}
@@ -115,13 +118,12 @@ const BurgerConstructor = () => {
               ))}
             </div>
           )) || (
-              <div
-                className={`${styles.componentsEmpty}${(isOver &&
-                  ingredientDrop !== 'bun' &&
-                  ` ${styles.containerEmptyDrop}`) ||
-                  ''
-                  }`}
-              >
+            <div
+            className={classNames(styles.componentsEmpty, {
+              [styles.containerEmptyDrop]:
+                isOver && ingredientDrop !== 'bun',
+            })}
+          >
                 <span className="text text_type_main-small">Добавьте начинку</span>
               </div>
             )}
@@ -135,12 +137,9 @@ const BurgerConstructor = () => {
           />
 
           <div className={styles.info}>
-            <div className={styles.price}>
-              <span className="text text_type_main-medium">{totalPrice}</span>
-              <CurrencyIcon type="primary" />
-            </div>
-            <Button htmlType="submit" type="primary" size="large" disabled={isDisabled}>
-              {status ? 'Загрузка...' : 'Оформить заказ'}
+            <Price type="total" totalPrice={totalPrice} size="big" />
+            <Button htmlType={ status ? 'button' : 'submit' } type="primary" size="large" disabled={isDisabled}>
+              { status ? 'Загрузка...' : 'Оформить заказ' }
             </Button>
           </div>
         </form>
@@ -153,7 +152,7 @@ const BurgerConstructor = () => {
         isLoading={status}
       >
 
-        <OrderDetails />
+        <OrderDetails isPending={status}/>
       </Modal>
 
 
