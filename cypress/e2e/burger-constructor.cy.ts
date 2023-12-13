@@ -1,13 +1,16 @@
 import { cyEmail, cyPassword } from "./../../src/assets/mock/mock-user-data"
-
+import { API } from './../../src/utils/api'
+const baseUrl = Cypress.config('baseUrl');
 describe('creating an order in the burger constructor', () => {
     beforeEach(() => {
-        cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+        cy.intercept('GET', `${API.baseUrl}/ingredients`, {
             fixture: 'ingredients.json',
         }).as('ingredients');
-        cy.visit('http://localhost:3000/');
+        
+        cy.visit('');
         cy.wait('@ingredients');
     });
+
     context('open/close ingredients modal', () => {
         it('should open and close modal', () => {
             cy.getByData('bun').within(() => {
@@ -25,11 +28,11 @@ describe('creating an order in the burger constructor', () => {
 
                 cy.get('@card').click();
             });
-
-            cy.location('pathname').should(
-                'equal',
-                '/ingredients/643d69a5c3f7b9001cfa093c'
-            );
+            cy.location().should((loc) => {
+                expect(loc.hash).to.eq('#/ingredients/643d69a5c3f7b9001cfa093c')
+            }
+            
+            )
 
             cy.getByData('ingredient-details')
                 .should('exist')
@@ -40,10 +43,11 @@ describe('creating an order in the burger constructor', () => {
                 .and('contain', '420');
 
             cy.getByData('close-button').click();
-            cy.location('href').should('equal', 'http://localhost:3000/');
+            cy.url().should('eq', `${baseUrl}/`);
         });
 
     });
+
     context('check dnd with order', () => {
         it('should drag items', () => {
             cy.getByData('order').as('dropArea')
@@ -51,7 +55,7 @@ describe('creating an order in the burger constructor', () => {
             cy.get("input").first().type(cyEmail);
             cy.get("input").last().type(cyPassword);
             cy.get("button").contains("Войти").click();
-            cy.location('href').should('equal', 'http://localhost:3000/profile');
+            cy.url().should('eq', `${baseUrl}/profile`);
             cy.get("a").contains("Конструктор").click();
             cy.getByData('content').children().eq(0).drag('@dropArea')
             cy.getByData('content').children().eq(3).drag('@dropArea')
@@ -64,6 +68,7 @@ describe('creating an order in the burger constructor', () => {
 
        
     })
+    
 });
 
 

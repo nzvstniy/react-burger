@@ -36,7 +36,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "deploy-script": "npm run build && scp -r ./build/* nzvstniy@158.160.133.202:~/stellar-front"
+    "deploy-script": "npm run build && scp -r ./build/* nzvstniy@158.160.133.202:~/stellar-front",
+    "cypress": "cypress open cache clear"
   },
   "eslintConfig": {
     "extends": [
