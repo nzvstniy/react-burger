@@ -1,12 +1,12 @@
 {
   "name": "react-burger",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/uuid": "^9.0.7",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
@@ -33,7 +33,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "deploy-script": "npm run build && scp -r ./build/* nzvstniy@158.160.133.202:~/stellar-front",
+    "cypress": "cypress open cache clear"
   },
   "eslintConfig": {
     "extends": [
@@ -54,9 +58,18 @@
     ]
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.5",
+    "@testing-library/react": "^14.1.2",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15"
+    "@types/react-dom": "^18.2.15",
+    "cypress": "^13.6.0",
+    "eslint-plugin-cypress": "^2.15.1",
+    "fetch-mock": "^9.11.0",
+    "gh-pages": "^6.1.0",
+    "jest": "^27.5.1",
+    "react-test-renderer": "^18.2.0",
+    "redux-mock-store": "^1.5.4"
   }
 }

@@ -8,17 +8,21 @@ type TOrder = {
     token: string;
 };
 
-const sendOrder = createAsyncThunk<IOrderSuccess, TOrder, { rejectValue: IOrderFail }>('orderDetails/sendOrder', async (data) => {
+const sendOrder = createAsyncThunk<IOrderSuccess, TOrder, { rejectValue: unknown }>('orderDetails/sendOrder', async (data, { rejectWithValue }) => {
     const { order, token } = data;
 
-    return request(API.endpoints.orders, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ ingredients: order }),
-    });
+    try {
+        return await request(API.endpoints.orders, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ ingredients: order }),
+        });
+    } catch (err) {
+        return rejectWithValue(err);
+    }
 });
 
 export default sendOrder;

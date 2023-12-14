@@ -12,9 +12,9 @@ const BurgerSection: ForwardRefExoticComponent<Omit<IIngredientsTab, 'ref'> & Re
     const ingredients = data?.data || [];
 
     return (
-        <section aria-label={type} ref={ref}>
+        <section aria-label={type} data-test={globalType} ref={ref}>
             <h2 className="text text_type_main-medium">{type}</h2>
-            <div className={styles.content}>
+            <div className={styles.content} data-test="content">
                 {ingredients
                     .filter(({ type }) => type === globalType)
                     .map((ingredient) => (

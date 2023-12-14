@@ -8,7 +8,7 @@ type TOrderDetailsSliceState = {
   error: null | IOrderFail;
 }
 
-const initialState: TOrderDetailsSliceState = {
+export const initialState: TOrderDetailsSliceState = {
   order: null,
   status: false,
   error: null,
@@ -17,13 +17,7 @@ const initialState: TOrderDetailsSliceState = {
 const orderDetailsSlice = createSlice({
   name: 'orderDetails',
   initialState,
-  reducers: {
-    SAVE_ORDER_DETAILS(state, { payload }) {
-      state.order = payload;
-    },
-
-    RESET_ORDER_DETAILS: () => initialState,
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(sendOrder.pending, (state) => {
@@ -43,5 +37,4 @@ const orderDetailsSlice = createSlice({
   },
 });
 
-export const { SAVE_ORDER_DETAILS, RESET_ORDER_DETAILS } = orderDetailsSlice.actions;
 export default orderDetailsSlice.reducer;

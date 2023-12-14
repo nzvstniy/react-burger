@@ -8,7 +8,7 @@ interface ITab extends IIngredientsTab {
   value: string;
 }
 
-const ConstructorComposition: FC = (): ReactElement => {
+const ConstructorComposition = () => {
 
   const [currentTab, setCurrentTab] = useState('one');
 

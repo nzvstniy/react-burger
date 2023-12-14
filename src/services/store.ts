@@ -1,5 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
-import ingredientReducer from './reducer-selector-directory/currentIngredient/current-ingredient-slice';
+import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolkit';
 import orderDetailsSlice from './reducer-selector-directory/orderDetails/order-details-slice';
 import userSlice from './reducer-selector-directory/user/user-slice'
 import authMiddleware from './reducer-selector-directory/middleware/auth-middleware';
@@ -8,22 +7,31 @@ import { ingredientsReducer } from './reducer-selector-directory/ingredients/ing
 import { orderFeedReducer } from './reducer-selector-directory/orderFeed/order-feed-reducer';
 import { profileOrderFeedReducer } from './reducer-selector-directory/profileOrderFeed/profile-order-feed-reducer';
 import { orderFeedMiddleware, profileOrderFeedMiddleware } from './reducer-selector-directory/middleware/ws-middleware';
+import currentIngredientSlice from './reducer-selector-directory/currentIngredient/current-ingredient-slice';
 
-const store = configureStore({
-  reducer: {
-    user: userSlice,
-    [ingredientsReducer.reducerPath]: ingredientsReducer.reducer,
-    currentIngredient: ingredientReducer,
-    ingredientsSelect: ingredientsSelectSlice,
-    orderDetails: orderDetailsSlice,
-    orderFeed: orderFeedReducer,
-    profileOrderFeed: profileOrderFeedReducer,
-  },
-
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authMiddleware, ingredientsReducer.middleware, orderFeedMiddleware, profileOrderFeedMiddleware),
-
+const rootReducer = combineReducers({
+  user: userSlice,
+  [ingredientsReducer.reducerPath]: ingredientsReducer.reducer,
+  currentIngredient: currentIngredientSlice,
+  ingredientsSelect: ingredientsSelectSlice,
+  orderDetails: orderDetailsSlice,
+  orderFeed: orderFeedReducer,
+  profileOrderFeed: profileOrderFeedReducer,
 });
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 
-export default store;
+export const storeSetup = (preloadedState?: PreloadedState<RootState>) =>
+  configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(
+        authMiddleware,
+        ingredientsReducer.middleware,
+        orderFeedMiddleware,
+        profileOrderFeedMiddleware
+      ),
+    preloadedState,
+  });
+
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof storeSetup>;
+export type AppDispatch = AppStore['dispatch'];

@@ -54,7 +54,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ isPageSingle = false, 
 
   return currentIngredient ? (
 
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-test="ingredient-details">
       {(isPageSingle && (
         <h1 className="text text_type_main-large">Детали ингредиента</h1>
       )) || <h3 className="text text_type_main-large">Детали ингредиента</h3>}

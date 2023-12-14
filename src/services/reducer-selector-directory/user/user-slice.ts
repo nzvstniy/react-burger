@@ -8,10 +8,10 @@ type TUserSliceState = {
     process: {
         isLoading: boolean;
         error: null | IUserErrorResponse;
-      };
+    };
 }
 
-const initialState: TUserSliceState = {
+export const initialState: TUserSliceState = {
     user: null,
     isAuthChecked: false,
     process: {
@@ -25,7 +25,7 @@ const initialState: TUserSliceState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {}, 
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(register.pending, (state) => {
